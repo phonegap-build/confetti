@@ -231,6 +231,7 @@ module Confetti
 
       # filters to look through sets for
       filters = [
+        {'platform' => opts['platform'], 'height' => opts['height'], 'width' => opts['width']},
         {'height' => opts['height'], 'width' => opts['width']},
         {'platform' => opts['platform'], 'density' => opts['density']},
         {'platform' => opts['platform'], 'state' => opts['state']},
