@@ -90,6 +90,9 @@ module Confetti
       @version_string = config_doc.attributes["version"]
       @version_code = config_doc.attributes["versionCode"]
 
+      icon_index = 0
+      splash_index = 0
+
       config_doc.elements.each do |ele|
         attr = ele.attributes
 
@@ -110,8 +113,9 @@ module Confetti
             @description = ele.text.nil? ? "" : ele.text.strip
 
           when "icon"
+            icon_index += 1
             @icon_set << Image.new(attr["src"], attr["height"], attr["width"],
-                                    attr)
+                                    attr, icon_index)
             # used for the info.plist file
             @plist_icon_set << attr["src"]
 
@@ -150,8 +154,9 @@ module Confetti
             @platform_set << Platform.new(attr["name"])
           when "splash"
             next if attr["src"].nil? or attr["src"].empty?
+            splash_index += 1
             @splash_set << Image.new(attr["src"], attr["height"], attr["width"],
-                                      attr)
+                                      attr, splash_index)
           when "url-scheme"
             schms = ele.elements.to_a('scheme').map { |a| a.text }
             schms.reject! { |a| a.nil? || a.empty? }
@@ -221,7 +226,8 @@ module Confetti
       @access_set.detect { |a| a.origin == '*' }
     end
 
-    def find_best_fit_img images, opts = {}
+    def find_best_fit_img images, opts, required=true
+
       opts['width']     ||= nil
       opts['height']    ||= nil
       opts['role']      ||= nil
@@ -229,27 +235,28 @@ module Confetti
       opts['state']     ||= nil
       opts['platform']  ||= nil
 
-      # filters to look through sets for
       filters = [
         {'platform' => opts['platform'], 'height' => opts['height'], 'width' => opts['width']},
         {'height' => opts['height'], 'width' => opts['width']},
         {'platform' => opts['platform'], 'density' => opts['density']},
         {'platform' => opts['platform'], 'state' => opts['state']},
-        {'platform' => opts['platform'], 'role' => opts['role']},
-        {'platform' => opts['platform']}
+        {'platform' => opts['platform'], 'role' => opts['role']}
       ]
+       
+      filters << {'platform' => opts['platform']} if required
 
       matches = nil
 
       filters.each do |filter|
         matches = filter_images(images, filter)
 
-        if matches.length == 1
+        if matches.length > 0
           break
         end
       end
 
-      matches.first unless matches.empty?
+      matches.sort {|a,b| a.index.to_i <=> b.index.to_i }.first unless matches.empty?
+
     end
 
     def default_icon
@@ -272,7 +279,9 @@ module Confetti
       # filter can have multiple criteria
       filter.each_pair do |name, value|
         imgs = imgs.reject do |img|
-          !img.respond_to?(name) || img.send(name) != value
+          !img.respond_to?(name) || 
+          (value.nil? && img.send(name).nil?) ||
+          img.send(name) != value
         end
       end
 

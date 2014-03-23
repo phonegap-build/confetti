@@ -20,6 +20,11 @@ describe Confetti::Config::Image do
     @image.height.should == 50
   end
 
+  it "should have a readable and writable index field" do
+    lambda { @image.index = 50 }.should_not raise_error
+    @image.index.should == 50
+  end
+
   it "should define a attribute dump method" do
     img = Confetti::Config::Image.new
     attrs = img.defined_attrs

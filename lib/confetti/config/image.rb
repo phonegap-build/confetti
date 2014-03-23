@@ -1,7 +1,7 @@
 module Confetti
   class Config
     class Image 
-      attr_accessor :src, :width, :height, :extras,
+      attr_accessor :src, :width, :height, :extras, :index,
         :role, :platform, :main, :density, :state, :retain
 
       def initialize *args
@@ -12,6 +12,8 @@ module Confetti
         @extras   = (args.shift || {}).reject do |name, val|
           %w{src height width}.include?(name)
         end
+
+        @index = args.shift
 
         @role     = @extras['role']
         @platform = @extras['platform']
