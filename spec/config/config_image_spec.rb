@@ -37,7 +37,8 @@ describe Confetti::Config::Image do
         "height"=>nil,
         "gap:role"=>nil,
         "width"=>nil,
-        "gap:retain"=>nil
+        "gap:retain"=>nil,
+        "gap:qualifier"=>nil
         }
   end
 end
