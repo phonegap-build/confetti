@@ -216,12 +216,6 @@ describe Confetti::Config do
       }.should raise_error Confetti::Config::XMLError
     end
 
-    it "should contain Iconv errors (with utf-16)" do
-      lambda {
-        @config.populate_from_xml("#{ fixture_dir }/bad-encoding.xml")
-      }.should raise_error Confetti::Config::EncodingError
-    end
-
     it "should handle blank values in preference tags" do
       lambda {
         @config.populate_from_xml("#{ fixture_dir }/config_empty_value.xml")
@@ -720,6 +714,135 @@ describe Confetti::Config do
         }
       )
       match.src.should == "icons/winphone/tileicon.png"
+    end
+
+    it "should return global default if exists" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("global_default.png")
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android'}
+      match.src.should == "global_default.png"
+    end
+
+    it "should return platform default if exists" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "android" })
+      splash_set << Confetti::Config::Image.new("global_default.png")
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android'}
+      match.src.should == "platform_default.png"
+    end
+
+    it "should return first non-platform-specific image if exists" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "ios" })
+      splash_set << Confetti::Config::Image.new("global_default.png", "48", "48", {"role" => "default", "platform" => "webos"})
+      splash_set << Confetti::Config::Image.new("non_platform_specific.png", "48", "48", {"role" => "default"})
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android'}
+      match.src.should == "non_platform_specific.png"
+    end
+
+    it "should return global default and not other size/platform" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "ios" },2)
+      splash_set << Confetti::Config::Image.new("global_default.png", nil,nil,nil,4)
+      splash_set << Confetti::Config::Image.new("ldpi_default.png", nil, nil, { "platform" => "ios", "density" => "ldpi" },1)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android'}
+      match.src.should == "global_default.png"
+    end
+
+    it "should return first matching image" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("global_default1.png", nil,nil,nil,4)
+      splash_set << Confetti::Config::Image.new("global_default2.png", nil,nil,nil,3)
+      splash_set << Confetti::Config::Image.new("global_default3.png", nil,nil,nil,2)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android'}
+      match.src.should == "global_default3.png"
+    end
+
+    it "should return nothing if not required and no matching icons" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "android" }, 1)
+      splash_set << Confetti::Config::Image.new("global_default.png", nil, nil, nil, 2)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android', 'density' => 'ldpi'}, false
+      match.should == nil
+    end
+
+    it "should return first icon if required and no matching icons" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "android" }, 1)
+      splash_set << Confetti::Config::Image.new("global_default.png", nil, nil, nil, 2)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android', 'density' => 'ldpi'}, true
+      match.src.should == "platform_default.png"
+    end
+
+    it "should allow compound attributes" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("image3.png", nil, nil, { "platform" => "webos,ios", "density" => "ldpi" }, 3)
+      splash_set << Confetti::Config::Image.new("image4.png", nil, nil, { "platform" => "webos,ios", "density" => "ldpi,mdpi" }, 4)
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "webos" }, 5)
+      splash_set << Confetti::Config::Image.new("global_default.png", nil, nil, nil, 6)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'webos', 'density' => 'ldpi'}, true
+      match.src.should == "image3.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'webos', 'density' => 'mdpi'}, true
+      match.src.should == "image4.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'webos'}, true
+      match.src.should == "platform_default.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'ios', 'density' => 'ldpi'}, true
+      match.src.should == "image3.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'ios'}, true
+      match.src.should == "global_default.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'ios', 'density' => 'mdpi'}, true
+      match.src.should == "image4.png"
+    end
+
+    it "should allow overloading of attributes" do
+      splash_set = TypedSet.new Confetti::Config::Image
+      splash_set << Confetti::Config::Image.new("image3.png", nil, nil, { "platform" => "webos", "density" => "ldpi" }, 3)
+      splash_set << Confetti::Config::Image.new("image6.png", nil, nil, { "density" => "ldpi", "role" => "default" }, 6)
+      splash_set << Confetti::Config::Image.new("platform_default.png", nil, nil, { "platform" => "sybmian" }, 1)
+      splash_set << Confetti::Config::Image.new("global_default.png", nil, nil, nil, 2)
+      @config.instance_variable_set("@splash_set", splash_set)
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'android', 'density' => 'ldpi'}, true
+      match.src.should == "image6.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'ios', 'density' => 'ldpi'}, true
+      match.src.should == "image6.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'sybmian', 'density' => 'ldpi'}, true
+      match.src.should == "image6.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'sybmian', 'density' => 'xxhdpi'}, true
+      match.src.should == "platform_default.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'webos', 'density' => 'ldpi'}, false
+      match.src.should == "image3.png"
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'blackberry'}, false
+      match.should == nil
+
+      match = @config.find_best_fit_img @config.send(:splash_set), {'platform' => 'blackberry'}, true
+      match.src.should == "global_default.png"
     end
 
     it "should find the best fit splash for android" do

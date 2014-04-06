@@ -228,22 +228,39 @@ module Confetti
 
     def find_best_fit_img images, opts, required=true
 
-      opts['width']     ||= nil
-      opts['height']    ||= nil
-      opts['role']      ||= nil
-      opts['density']   ||= nil
-      opts['state']     ||= nil
-      opts['platform']  ||= nil
+      opts['width']     ||= :no_match
+      opts['height']    ||= :no_match
+      opts['role']      ||= :no_match
+      opts['density']   ||= :no_match
+      opts['state']     ||= :no_match
+      opts['platform']  ||= :no_match
+
+      no_attributes = {
+        'width'     => nil,
+        'height'    => nil,
+        'role'      => nil,
+        'density'   => nil,
+        'state'     => nil,
+        'platform'  => nil,
+        'qualifier' => nil
+      }
 
       filters = [
         {'platform' => opts['platform'], 'height' => opts['height'], 'width' => opts['width']},
-        {'height' => opts['height'], 'width' => opts['width']},
+        {'platform'  => nil, 'height' => opts['height'], 'width' => opts['width']},
         {'platform' => opts['platform'], 'density' => opts['density']},
+        {'platform'  => nil, 'density' => opts['density']},
         {'platform' => opts['platform'], 'state' => opts['state']},
-        {'platform' => opts['platform'], 'role' => opts['role']}
+        {'platform'  => nil, 'state' => opts['state']},
+        {'platform' => opts['platform'], 'role' => opts['role']},
+        {'platform'  => nil, 'role' => opts['role']}
       ]
-       
-      filters << {'platform' => opts['platform']} if required
+
+      if required # match platform default, global default, first file without a platform
+        filters << no_attributes.merge({'platform' => opts['platform']})
+        filters << no_attributes
+        filters << {'platform'  => nil}
+      end
 
       matches = nil
 
@@ -255,8 +272,10 @@ module Confetti
         end
       end
 
-      matches.sort {|a,b| a.index.to_i <=> b.index.to_i }.first unless matches.empty?
-
+      if !matches.empty?
+        return matches.sort {|a,b| a.index.to_i <=> b.index.to_i }.first
+      end
+      nil
     end
 
     def default_icon
@@ -275,14 +294,18 @@ module Confetti
 
     def filter_images images, filter
       imgs = images.clone
-
-      # filter can have multiple criteria
       filter.each_pair do |name, value|
-        imgs = imgs.reject do |img|
-          !img.respond_to?(name) || 
-          (value.nil? && img.send(name).nil?) ||
-          img.send(name) != value
-        end
+        imgs = imgs.select { |img|
+          value_to_match = img.send(name)
+
+          if value_to_match.nil? # missing attr only matches nil
+            value.nil?
+          else 
+            value_to_match.split(',').any? { |a| 
+              value == '*' || a.strip == '*' || a.strip == value
+            }
+          end
+        }
       end
 
       imgs
