@@ -73,6 +73,7 @@ module Confetti
         features = []
         phonegap_api = /http\:\/\/api.phonegap.com\/1[.]0\/(\w+)/
         feature_names = @config.feature_set.map { |f| f.name }
+        feature_names = feature_names - [nil]
         feature_names.sort
 
         feature_names.each do |f|
