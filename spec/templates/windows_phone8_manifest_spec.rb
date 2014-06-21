@@ -68,7 +68,7 @@ describe Confetti::Template::WindowsPhone8Manifest do
 
       it "should render a valid wp7 manifest" do
         @config = Confetti::Config.new "#{fixture_dir}/config.xml"
-        @template = @template_class.new @config 
+        @template = @template_class.new @config
         @template.render.should == File.read(
             "#{fixture_dir}/windowsphone8/WMAppManifest.xml"
           )
@@ -85,17 +85,10 @@ describe Confetti::Template::WindowsPhone8Manifest do
         @template.capabilities.should == [{:name=>"ID_CAP_LOCATION"}]
       end
 
-      it "should add default capabilities when none are specified" do
+      it "should not add default capabilities when none are specified" do
         @config = Confetti::Config.new
         @template = @template_class.new @config
-        @template.capabilities.should == [
-            {:name => "ID_CAP_CONTACTS"},
-            {:name => "ID_CAP_IDENTITY_DEVICE"},
-            {:name => "ID_CAP_ISV_CAMERA"},
-            {:name => "ID_CAP_LOCATION"},
-            {:name => "ID_CAP_MICROPHONE"},
-            {:name => "ID_CAP_NETWORKING"},
-        ]
+        @template.capabilities.should == []
       end
 
       it "should no add any capabilities when preference permissions is none" do

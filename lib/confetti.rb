@@ -1,7 +1,7 @@
 CURRENT_DIR = File.dirname(__FILE__)
 
 # stdlib
-require "rexml/document"
+require 'nokogiri'
 require 'digest/md5'
 
 # external dependencies

@@ -172,13 +172,13 @@ describe Confetti::Config do
 
     it "should call #populate_from_xml with a file passed" do
       @blank_config.stub(:is_file?).and_return(true)
-      @blank_config.should_receive(:populate_from_xml).with("config.xml")
+      @blank_config.should_receive(:populate_from_xml).with("config.xml", false)
       @blank_config.send :initialize, "config.xml"
     end
 
     it "should call #populate_from_string when a string is passed" do
       @blank_config.should_receive(
-        :populate_from_string).with("</widget>")
+        :populate_from_string).with("</widget>", false)
       @blank_config.send :initialize, "</widget>"
     end
 
@@ -203,9 +203,15 @@ describe Confetti::Config do
       }.should raise_error Confetti::Config::FileError
     end
 
-    it "should raise an error with malformed xml" do
+    it "should not raise an error with malformed xml by default" do
       lambda {
         @config.populate_from_xml("#{ fixture_dir }/bad_config.xml")
+      }.should_not raise_error
+    end
+
+    it "should raise an error with malformed xml, if strict parsing is requested" do
+      lambda {
+        @config.populate_from_xml("#{ fixture_dir }/bad_config.xml", true)
       }.should raise_error Confetti::Config::XMLError
     end
 
@@ -252,7 +258,7 @@ describe Confetti::Config do
 
       it "should keep a reference to the xml doc" do
         @config.xml_doc.should_not == nil
-        @config.xml_doc.class.should == REXML::Element
+        @config.xml_doc.class.should == Nokogiri::XML::Element
       end
 
       it "should populate the app's package when present" do
@@ -911,47 +917,6 @@ describe Confetti::Config do
 
       it "should return false for the string false" do
         @config.boolean_value("false", true).should be_false
-      end
-    end
-  end
-
-  describe "serialization" do
-
-    before :each do
-      @config = Confetti::Config.new(File.join(
-          fixture_dir,
-          "config.xml"
-          ))
-    end
-
-    it "should define a to_s method" do
-      @config.to_s.kind_of?(String).should == true
-    end
-
-    it "should serialize when no filters provided" do
-      @config.to_s.should match /icon/
-      # this should remove all instances of icons from the string
-      @config.filtered_to_s("//icon").should_not match /icon/
-    end
-
-    describe "#to_xml" do
-        
-      it "should define a to_xml method" do
-        @config.should respond_to :to_xml
-      end
-
-      it "should render the config as valid xml" do
-        # if given a config object running a to_xml and feeding
-        # it back into a config object should produce the same contents
-        out = ""
-        @config.to_xml.write( out, 2 )
-        config = Confetti::Config.new out
-        config.author.name.should == "Andrew Lunny"
-        config.feature_set.length.should == 3
-        config.preference_set.length.should == 2
-        config.icon_set.length.should == 1
-        config.splash_set.length.should == 1
-        config.content.src.should == "not_index.html"
       end
     end
   end

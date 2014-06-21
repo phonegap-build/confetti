@@ -85,18 +85,10 @@ describe Confetti::Template::WindowsPhone7Manifest do
         @template.capabilities.should == [{:name=>"ID_CAP_LOCATION"}]
       end
 
-      it "should add default capabilities when none are specified" do
+      it "should not add default capabilities when none are specified" do
         @config = Confetti::Config.new
         @template = @template_class.new @config
-        @template.capabilities.should == [
-            {:name => "ID_CAP_CONTACTS"},
-            {:name => "ID_CAP_IDENTITY_DEVICE"},
-            {:name => "ID_CAP_ISV_CAMERA"},
-            {:name => "ID_CAP_LOCATION"},
-            {:name => "ID_CAP_MICROPHONE"},
-            {:name => "ID_CAP_NETWORKING"},
-            {:name => "ID_HW_FRONTCAMERA"},
-        ]
+        @template.capabilities.should == []
       end
 
       it "should no add any capabilities when preference permissions is none" do

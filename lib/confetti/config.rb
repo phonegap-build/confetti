@@ -48,36 +48,37 @@ module Confetti
 
       return if args.empty?
 
-      input = args.first
+      input = args[0]
+      strict = args[1] || false
 
       if is_file?( input ) || File.extname( input ) == ".xml"
-        populate_from_xml input
+        populate_from_xml input, strict
       elsif input.kind_of?( String )
-        populate_from_string input
+        populate_from_string input, strict
       end
     end
 
-    def populate_from_xml(xml_file)
+    def populate_from_xml( xml_file, strict = false )
       begin
         file = File.read(xml_file)
       rescue Errno::ENOENT
         raise FileError, "file #{ xml_file } doesn't exist"
       end
       
-      populate file 
+      populate file, strict 
     end
 
-    def populate_from_string( xml_str )
-      populate xml_str 
+    def populate_from_string( xml_str, strict = false )
+      populate xml_str, strict
     end
 
-    def populate( config_doc )
+    def populate( config_doc, strict = false )
       begin
-        config_doc = REXML::Document.new( config_doc ).root
-      rescue REXML::ParseException
+        config_doc = Nokogiri::XML( config_doc ) { |config| 
+          strict ? config.nonet.strict : config.nonet.recover
+        }.root
+      rescue Nokogiri::XML::SyntaxError, TypeError, RuntimeError
         raise XMLError, "malformed config.xml"
-      rescue Iconv::InvalidCharacter
-        raise EncodingError, "unable to read config.xml"
       end
 
       if config_doc.nil?
@@ -86,17 +87,18 @@ module Confetti
 
       @xml_doc = config_doc # save reference to doc
 
-      @package = config_doc.attributes["id"]
-      @version_string = config_doc.attributes["version"]
-      @version_code = config_doc.attributes["versionCode"]
+      @package = config_doc["id"]
+      @version_string = config_doc["version"]
+      @version_code = config_doc["versionCode"]
 
       icon_index = 0
       splash_index = 0
 
       config_doc.elements.each do |ele|
-        attr = ele.attributes
+        attr = {}
+        ele.attributes.each { |k, v| attr[k] = v.to_s }
 
-        case ele.namespace
+        case ele.namespace.href
 
         # W3C widget elements
         when "http://www.w3.org/ns/widgets"
@@ -122,9 +124,8 @@ module Confetti
           when "feature"
             feature = Feature.new(attr["name"], attr["required"])
 
-            ele.each_element( 'param' ) do |param|
-              p_attr = param.attributes
-              feature.param_set << Param.new(p_attr["name"], p_attr["value"])
+            ele.search("param").each do |param|
+              feature.param_set << Param.new(param["name"], param["value"])
             end
 
             @feature_set  << feature
@@ -158,7 +159,7 @@ module Confetti
             @splash_set << Image.new(attr["src"], attr["height"], attr["width"],
                                       attr, splash_index)
           when "url-scheme"
-            schms = ele.elements.to_a('scheme').map { |a| a.text }
+            schms = ele.search('scheme').map { |a| a.text }
             schms.reject! { |a| a.nil? || a.empty? }
             next if schms.empty?
             @url_scheme_set << UrlScheme.new(schms, attr["name"], attr["role"])
@@ -166,9 +167,8 @@ module Confetti
           when "plugin"
             next if attr["name"].nil? or attr["name"].empty?
             plugin = Plugin.new(attr["name"], attr["version"])
-            ele.each_element('param') do |param|
-              p_attr = param.attributes
-              plugin.param_set << Param.new(p_attr["name"], p_attr["value"])
+            ele.search("param").each do |param|
+              plugin.param_set << Param.new(param["name"], param["value"])
             end
             @plugin_set << plugin
           end
@@ -318,136 +318,6 @@ module Confetti
       else
         value == "true"
       end
-    end
-
-    def filtered_to_s( xpaths = [] )
-      xpaths = [ xpaths ] unless xpaths.kind_of?(Array)
-
-      xml = @xml_doc.dup unless @xml_doc.nil?
-      xml ||= to_xml
-
-      xpaths.each do |path|
-        xml.root.elements.delete_all path
-      end
-
-      xml.root.to_s
-    end
-
-    def to_s
-      @xml_doc.root.to_s
-    end
-
-    def to_xml
-      doc = REXML::Document.new
-
-      widget = REXML::Element.new( "widget" )
-      widget.add_attributes({
-        "xmlns" => "http://www.w3.org/ns/widgets",
-        "xmlns:gap" =>  "http://phonegap.com/ns/1.0",
-        "id" => @package,
-        "version" => @version_string
-        })
-
-      if !@version_code.nil?
-        widget.add_attribute({ "versionCode" => @version_code })
-      end
-
-      name = REXML::Element.new( "name" )
-      name.text = @name.name
-      name.add_attribute({ "shortname" => @name.shortname })
-
-      content = REXML::Element.new( "content" )
-      content.add_attributes({
-          "src" => @content.src,
-          "type" => @content.type
-        })
-
-      author = REXML::Element.new( "author" )
-      author.text = @author.name
-      author.add_attributes({
-          "href" => @author.href,
-          "email" => @author.email
-          })
-
-      description = REXML::Element.new( "description" )
-      description.text = @description
-
-      license = REXML::Element.new( "license" )
-      license.text = @license.text
-      license.add_attribute({ "href" => @license.href })
-
-      icons = []
-      @icon_set.each do | icon |
-        ico = REXML::Element.new( "icon" )
-        attrs = icon.defined_attrs
-        ico.add_attributes attrs
-        icons << ico
-      end
-
-      splashes = []
-      @splash_set.each do | splash |
-        spl = REXML::Element.new( "gap:splash" )
-        attrs = splash.defined_attrs
-        spl.add_attributes attrs
-        splashes << spl
-      end
-      
-      url_schemes = []
-      @url_scheme_set.each do | scheme |
-        schm = REXML::Element.new( "gap:url-scheme" )
-        schm.add_attributes({"name" => scheme.name }) unless scheme.name.nil?
-        schm.add_attributes({"role" => scheme.role }) unless scheme.role.nil?
-        scheme.schemes.each{|s| schm.add_element("scheme").add_text(s) }
-        url_schemes << schm
-      end
-
-      preferences = []
-      @preference_set.each do | preference |
-        pref = REXML::Element.new( "preference" )
-        pref.add_attributes({
-            "name" => preference.name,
-            "value" => preference.value,
-            "readonly" => preference.readonly
-            })
-        preferences << pref
-      end
-
-      features = []
-      @feature_set.each do | feature |
-        feat = REXML::Element.new( "feature" )
-        feat.add_attributes({
-            "name" => feature.name,
-            "required" => feature.required,
-            })
-
-        features << feat 
-      end
-
-      platforms = []
-      @platform_set.each do | platform |
-        plat = REXML::Element.new( "gap:platform" )
-        plat.add_attributes({
-            "name" => platform.name
-            })
-        platforms << plat 
-      end
-
-      widget.elements.add name 
-      widget.elements.add author
-      widget.elements.add description 
-      widget.elements.add license 
-      widget.elements.add content
-
-      icons.each { | icon | widget.elements.add icon }
-      splashes.each { | splash | widget.elements.add splash }
-      preferences.each { | pref | widget.elements.add pref }
-      features.each { | feat | widget.elements.add feat }
-      platforms.each { | plat | widget.elements.add plat }
-      url_schemes.each { | schm | widget.elements.add schm }
-
-      doc << REXML::XMLDecl.new
-      doc.elements.add widget
-      doc
     end
   end
 end
