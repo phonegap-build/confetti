@@ -24,8 +24,6 @@
     <string>John Garrett Drinking Game</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
-    <key>CFBundleIconFile</key>
-    <string>icon.png</string>
     <key>CFBundleIdentifier</key>
     <string>com.nitobi.johngarrett</string>
     <key>CFBundleInfoDictionaryVersion</key>

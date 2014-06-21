@@ -26,8 +26,6 @@
     <string>Confetti Sample App</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
-    <key>CFBundleIconFile</key>
-    <string>icon.png</string>
     <key>CFBundleIdentifier</key>
     <string>com.alunny.confetti</string>
     <key>CFBundleInfoDictionaryVersion</key>
