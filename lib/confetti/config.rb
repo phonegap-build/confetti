@@ -98,7 +98,9 @@ module Confetti
         attr = {}
         ele.attributes.each { |k, v| attr[k] = v.to_s }
 
-        case ele.namespace.href
+        ele_namespace = ele.namespace ? ele.namespace.href : "http://www.w3.org/ns/widgets"
+
+        case ele_namespace
 
         # W3C widget elements
         when "http://www.w3.org/ns/widgets"

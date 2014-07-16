@@ -209,6 +209,17 @@ describe Confetti::Config do
       }.should_not raise_error
     end
 
+    it "should not raise an error with no namespaces" do
+      lambda {
+        @config.populate_from_xml("#{ fixture_dir }/config_no_namespace.xml")
+      }.should_not raise_error
+    end
+
+    it "should assume widget xmlns if no namespace specified" do
+      @config.populate_from_xml("#{ fixture_dir }/config_no_namespace.xml")
+      @config.name.name.should == "Confetti Sample App"
+    end
+
     it "should raise an error with malformed xml, if strict parsing is requested" do
       lambda {
         @config.populate_from_xml("#{ fixture_dir }/bad_config.xml", true)
