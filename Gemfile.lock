@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    confetti (0.10.2r2)
+    confetti (0.10.3r2)
       mustache (~> 0.11.2)
       nokogiri (= 1.6.2.1)
 
