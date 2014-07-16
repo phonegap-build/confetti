@@ -73,6 +73,12 @@ module Confetti
     end
 
     def populate( config_doc, strict = false )
+      
+      # confirm valid encoding
+      if config_doc && !config_doc.valid_encoding?
+        raise XMLError, "malformed config.xml"
+      end
+
       begin
         config_doc = Nokogiri::XML( config_doc ) { |config| 
           strict ? config.nonet.strict : config.nonet.recover

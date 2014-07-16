@@ -220,6 +220,12 @@ describe Confetti::Config do
       @config.name.name.should == "Confetti Sample App"
     end
 
+    it "should raise an error with malformed xml if bad encoding" do
+      lambda {
+        @config.populate_from_xml("#{ fixture_dir }/bad_utf8.xml", true)
+      }.should raise_error Confetti::Config::XMLError
+    end
+
     it "should raise an error with malformed xml, if strict parsing is requested" do
       lambda {
         @config.populate_from_xml("#{ fixture_dir }/bad_config.xml", true)
