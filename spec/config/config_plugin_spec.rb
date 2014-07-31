@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Confetti::PhoneGap::Plugin do
   before do
-    @child = Confetti::PhoneGap::Plugin.new("ChildBrowser", "~2.0")
+    @child = Confetti::PhoneGap::Plugin.new("ChildBrowser", "~2.0", "true")
   end
 
   it "should have a readable and writable name field" do
@@ -13,6 +13,16 @@ describe Confetti::PhoneGap::Plugin do
   it "should have a readable and writable version field" do
     lambda { @child.version = "1.0" }.should_not raise_error
     @child.version.should == "1.0"
+  end
+
+  it "should have a readable and writable source field" do
+    lambda { @child.source = "bungle" }.should_not raise_error
+    @child.source.should == "bungle"
+  end
+
+  it "should have a readable and writable platforms field" do
+    lambda { @child.platforms = "bungle" }.should_not raise_error
+    @child.platforms.should == "bungle"
   end
 
   describe "parameter set" do

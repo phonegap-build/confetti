@@ -494,6 +494,18 @@ describe Confetti::Config do
           @fbconnect.version.should == "~1"
         end
 
+        it "should set the source properties correctly" do
+          @child.source.should == "internal"
+          @push.source.should be_nil
+          @fbconnect.source.should == "external"
+        end
+
+        it "should set the platforms properties correctly" do
+          @child.platforms.should == "ios,android"
+          @push.platforms.should == "android"
+          @fbconnect.platforms.should be_nil
+        end
+
         describe "params" do
           it "should be empty when none are specified" do
             @child.param_set.should be_empty

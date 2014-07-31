@@ -174,7 +174,12 @@ module Confetti
             
           when "plugin"
             next if attr["name"].nil? or attr["name"].empty?
-            plugin = Plugin.new(attr["name"], attr["version"])
+            plugin = Plugin.new(
+              attr["name"], 
+              attr["version"], 
+              attr["platform"] || attr["platforms"], 
+              attr["source"]
+            )
             ele.search("param").each do |param|
               plugin.param_set << Param.new(param["name"], param["value"])
             end
