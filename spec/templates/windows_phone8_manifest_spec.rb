@@ -66,7 +66,7 @@ describe Confetti::Template::WindowsPhone8Manifest do
 
     describe "on rendering" do
 
-      it "should render a valid wp7 manifest" do
+      it "should render a valid wp8 manifest" do
         @config = Confetti::Config.new "#{fixture_dir}/config.xml"
         @template = @template_class.new @config
         @template.render.should == File.read(

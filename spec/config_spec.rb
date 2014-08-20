@@ -534,15 +534,9 @@ describe Confetti::Config do
 
     it_should_have_generate_and_write_methods_for :android_strings
 
-    it_should_have_generate_and_write_methods_for :webos_appinfo
-
     it_should_have_generate_and_write_methods_for :ios_info
 
-    it_should_have_generate_and_write_methods_for :symbian_wrt_info
-
-    it_should_have_generate_and_write_methods_for :blackberry_widgets_config
-
-    it_should_have_generate_and_write_methods_for :windows_phone7_manifest
+    it_should_have_generate_and_write_methods_for :windows_phone8_manifest
   end
 
   describe "icon helpers" do

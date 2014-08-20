@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{6c724dc0-52a1-7928-dc98-6b05e95fb30e}" Title="Confetti Sample App" 
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+  <DefaultLanguage code="en-US" xmlns="" />
+  <Languages xmlns="">
+  	<Language code="en-US" />
+  </Languages>
+  <App xmlns="" PublisherID="{5679a97b-f03e-3ae7-aa12-dfcb71c12166}" ProductID="{6c724dc0-52a1-7928-dc98-6b05e95fb30e}" Title="Confetti Sample App" 
        RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal"  
        Author="Andrew Lunny" 
        Description="This is a sample config.xml for integration testing with Confetti" 
@@ -10,7 +14,6 @@
     <Capabilities>
       <Capability Name="ID_CAP_ISV_CAMERA" />
       <Capability Name="ID_CAP_LOCATION" />
-      <Capability Name="ID_HW_FRONTCAMERA" />
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     
@@ -26,5 +29,10 @@
         </TemplateType5>
       </PrimaryToken>
     </Tokens>
+    <ScreenResolutions>
+	    <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+	    <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+	    <ScreenResolution Name="ID_RESOLUTION_HD720P" />
+	</ScreenResolutions>
   </App>
 </Deployment>

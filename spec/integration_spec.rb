@@ -24,15 +24,6 @@ describe 'Writing Output' do
     end
   end
 
-  context "webOS" do
-    it "should read config.xml and spit out appinfo.json" do
-      @output_file = "#{ fixture_dir }/webos/appinfo_output.json"
-      @config.write_webos_appinfo @output_file
-
-      files_should_match @output_file, "#{ fixture_dir }/webos/appinfo_expected.json"
-    end
-  end
-
   context "iOS" do
     it "should read config.xml and spit out Info.plist" do
       @output_file = "#{ fixture_dir }/ios/ios_info_output.plist"
@@ -42,38 +33,12 @@ describe 'Writing Output' do
     end
   end
 
-  context "Symbian.wrt" do
-    it "should read config.xml and spit out info.plist" do
-      @output_file = "#{ fixture_dir }/symbian/symbian_wrt_info_output.plist"
-      @config.write_symbian_wrt_info @output_file
+  context "winphone8" do
+    it "should read config.xml and spit out Info.plist" do
+      @output_file = "#{ fixture_dir }/windowsphone8/WMAppManifest_output.xml"
+      @config.write_windows_phone8_manifest @output_file
 
-      files_should_match @output_file, "#{ fixture_dir }/symbian/symbian_wrt_info_expected.plist"
-    end
-  end
-
-  context "Blackberry Widgets" do
-    describe "legacy Phonegap" do
-      before do
-        @config = Confetti::Config.new "#{ fixture_dir }/config_legacy.xml"
-      end
-
-      it "should read config.xml and spit out config.xml" do
-        @output_file = "#{ fixture_dir }/blackberry/blackberry_widget_config_output.xml"
-        @config.write_blackberry_widgets_config @output_file
-
-        files_should_match @output_file,
-          "#{ fixture_dir }/blackberry/blackberry_widget_config_legacy_expected.xml"
-      end
-    end
-
-    describe "current (>= 1.3.0) Phonegap" do
-      it "should read config.xml and spit out config.xml" do
-        @output_file = "#{ fixture_dir }/blackberry/blackberry_widget_config_output.xml"
-        @config.write_blackberry_widgets_config @output_file
-
-        files_should_match @output_file,
-          "#{ fixture_dir }/blackberry/blackberry_widget_config_expected.xml"
-      end
+      files_should_match @output_file, "#{ fixture_dir }/windowsphone8/WMAppManifest_expected.xml"
     end
   end
 
