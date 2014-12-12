@@ -71,12 +71,13 @@ module Confetti
       end
     end
 
-    class Access < Struct.new(:origin, :subdomains, :browserOnly)
+    class Access < Struct.new(:origin, :subdomains, :browserOnly, :launchExternal)
       def defined_attrs
         {
           "origin" => self[ :origin ],
           "subdomains" => self[ :subdomains ],
-          "browserOnly" => self[ :browserOnly ]
+          "browserOnly" => self[ :browserOnly ],
+          "launchExternal" => self[ :launchExternal ]
         }
       end
     end

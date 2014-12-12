@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    confetti (0.10.8)
+    confetti (0.10.9)
       mustache (~> 0.11.2)
-      nokogiri (= 1.6.3.1)
+      nokogiri (~> 1.6.3.1)
 
 GEM
   remote: http://rubygems.org/

@@ -147,7 +147,8 @@ module Confetti
           when "access"
             sub = boolean_value(attr["subdomains"], true)
             browserOnly = boolean_value(attr["browserOnly"])
-            @access_set << Access.new(attr["origin"], sub, browserOnly)
+            launchExternal = attr["launch-external"] == "yes"
+            @access_set << Access.new(attr["origin"], sub, browserOnly, launchExternal)
 
           when "content"
             @content = Content.new(attr["src"], attr["type"], attr["encoding"])

@@ -6,12 +6,13 @@ describe Confetti::Config::Access do
   end
 
   it "should define a defined_attrs method" do
-    access = Confetti::Config::Access.new( "google.ca", true, false )
+    access = Confetti::Config::Access.new( "google.ca", true, false, true )
 
     access.defined_attrs.should == {
       "origin" => "google.ca",
       "subdomains" => true,
-      "browserOnly" => false
+      "browserOnly" => false,
+      "launchExternal" => true
     }
   end
 end
