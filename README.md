@@ -8,10 +8,6 @@
 
 ## Usage
 
-    $ confetti generate android_manifest
-
-or, from Ruby
-
     require "confetti"
     c_whatever = Confetti::Config.new "/some/dir/config.xml"
     c_whatever.write_android_manifest "/some/dir/AndroidManifest.xml"
@@ -30,13 +26,6 @@ Supported outputs right now: `android_manifest`, `android_strings`, `webos_appin
 
 Let's say you want write a `nintendo_ds_config` generator:
 
-* create a feature file, like `features/nintendo.feature`
-  * specify all the files to generate for your platform
-  * specify the name each file will go under
-    * `nintendo_ds_config`
-  * and the default filename
-    * `NintendoDSConfig.xml`
-  * run `rake features` to verify that it fails
 * add a sample configuration file to `spec/fixtures`
   * the filename is based on the descriptive name
     * `nintendo_ds_config_expected.xml`
@@ -66,7 +55,3 @@ Let's say you want write a `nintendo_ds_config` generator:
   * add your platform to the `generate_and_write` call
     * `generate_and_write ... :nintendo_ds_config`
 * run `rake spec` again
-* build and install the gem, or whatever, so the cucumber tests work
-* run `feature/nintendo.feature`
-  * it's all green!
-  * you're the man now dog
