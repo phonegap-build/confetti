@@ -1,0 +1,15 @@
+{
+  "name": "Awesome App",
+  "description": "This is an awesome app",
+  "launch_path": "index.html",
+  "version": "0.0.1",
+  "icons": {
+    "128": "icon.png"
+  },
+  "developer": {
+    "name": "Awesome Developer"
+  },
+  "default_locale": "en",
+  "type": "privileged",
+  "fullscreen": true
+}
