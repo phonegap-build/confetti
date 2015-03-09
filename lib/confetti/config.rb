@@ -14,7 +14,7 @@ module Confetti
                 :url_scheme_set, :platform_set, :allow_navigation_set, :allow_intent_set
 
     generate_and_write  :android_manifest, :android_strings, :ios_info, 
-                        :ios_remote_plist, :windows_phone8_manifest
+                        :ios_remote_plist, :windows_phone8_manifest, :windows_manifest
 
     # handle bad generate/write calls
     def method_missing(method_name, *args)
