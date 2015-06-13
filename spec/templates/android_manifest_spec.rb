@@ -180,7 +180,7 @@ describe Confetti::Template::AndroidManifest do
     end
   end
 
-  describe "#min_sdk_version" do
+  describe "#min_sdk_version_attribute" do
     before do
       @config = Confetti::Config.new
       @template = @template_class.new(@config)
@@ -188,7 +188,7 @@ describe Confetti::Template::AndroidManifest do
     end
 
     it "should default to the current default" do
-      @template.min_sdk_version.should == @default
+      @template.min_sdk_version_attribute.should == "android:minSdkVersion=\"#{@default}\" "
     end
 
     describe "when set" do
@@ -199,12 +199,12 @@ describe Confetti::Template::AndroidManifest do
 
       it "should return that number" do
         @sdk_pref.value = "12"
-        @template.min_sdk_version.should == "12"
+        @template.min_sdk_version_attribute.should == 'android:minSdkVersion="12" '
       end
 
       it "should be nil if not a number" do
         @sdk_pref.value = "twelve"
-        @template.min_sdk_version.should == @default
+        @template.min_sdk_version_attribute.should be_nil
       end
     end
   end
