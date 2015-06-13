@@ -159,7 +159,7 @@ module Confetti
         when "http://phonegap.com/ns/1.0"
           case ele.name
           when "platform"
-            @platform_set << Platform.new(attr["name"])
+            @platform_set << Platform.new(attr["name"], attr["phonegap-version"])
           when "splash"
             next if attr["src"].nil? or attr["src"].empty?
             splash_index += 1
