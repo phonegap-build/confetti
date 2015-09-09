@@ -5,7 +5,7 @@ module Confetti
     self.extend TemplateHelper
 
     attr_accessor :package, :version_string, :version_code, :description,
-                  :height, :width, :plist_icon_set, :url_scheme_set
+                  :height, :width, :plist_icon_set, :url_scheme_set, :default_min_sdk
     attr_reader :author, :viewmodes, :name, :license, :content,
                 :icon_set, :feature_set, :preference_set, :xml_doc,
                 :splash_set, :plist_icon_set, :access_set, :plugin_set,
@@ -39,6 +39,7 @@ module Confetti
       @preference_set   = TypedSet.new Preference
       @access_set       = TypedSet.new Access
       @url_scheme_set   = TypedSet.new UrlScheme
+      @default_min_sdk  = 10
 
       # defined in PhoneGap module
       @plugin_set       = TypedSet.new Plugin

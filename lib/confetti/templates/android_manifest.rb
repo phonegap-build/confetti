@@ -3,8 +3,6 @@ module Confetti
     class AndroidManifest < Base
       include JavaChecks
 
-      DEFAULT_MIN_SDK = "10"
-
       GAP_PERMISSIONS_MAP = {
         "camera"        => %w{CAMERA},
         "notification"  => %w{VIBRATE},
@@ -95,7 +93,7 @@ module Confetti
       end
 
       def min_sdk_version_attribute
-        choice = @config.preference("android-minSdkVersion") || DEFAULT_MIN_SDK
+        choice = @config.preference("android-minSdkVersion") || @config.default_min_sdk
 
         if int_value?(choice)
           "android:minSdkVersion=\"#{ choice }\" "

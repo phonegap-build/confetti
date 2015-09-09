@@ -184,11 +184,16 @@ describe Confetti::Template::AndroidManifest do
     before do
       @config = Confetti::Config.new
       @template = @template_class.new(@config)
-      @default = @template_class::DEFAULT_MIN_SDK
+      @default = @config.default_min_sdk
     end
 
     it "should default to the current default" do
       @template.min_sdk_version_attribute.should == "android:minSdkVersion=\"#{@default}\" "
+    end
+
+    it "should default to the default as set in config" do
+      @config.default_min_sdk = 99
+      @template.min_sdk_version_attribute.should == "android:minSdkVersion=\"99\" "
     end
 
     describe "when set" do
