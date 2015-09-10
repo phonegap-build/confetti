@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:tools="http://schemas.android.com/tools"
     package="{{ package_name }}"
     android:installLocation="{{ install_location }}"
     android:versionName="{{ version }}"
@@ -14,7 +15,7 @@
         android:resizeable="true"
         android:anyDensity="true"
         />
-
+        
     <uses-permission android:name="android.permission.INTERNET" />
     {{# permissions }}
     <uses-permission android:name="android.permission.{{ name }}" />
@@ -35,6 +36,6 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-sdk {{{ min_sdk_version_attribute }}}{{{ max_sdk_version_attribute }}}{{{ target_sdk_version_attribute }}}/>
+    <uses-sdk tools:overrideLibrary="org.apache.cordova" {{{ min_sdk_version_attribute }}}{{{ max_sdk_version_attribute }}}{{{ target_sdk_version_attribute }}}/>
 
 </manifest>
