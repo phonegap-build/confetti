@@ -9,7 +9,7 @@ module Confetti
     attr_reader :author, :viewmodes, :name, :license, :content,
                 :icon_set, :feature_set, :preference_set, :xml_doc,
                 :splash_set, :plist_icon_set, :access_set, :plugin_set,
-                :url_scheme_set, :platform_set
+                :url_scheme_set, :platform_set, :allow_navigation_set, :allow_intent_set
 
     generate_and_write  :android_manifest, :android_strings, :ios_info, 
                         :ios_remote_plist, :windows_phone8_manifest
@@ -38,6 +38,8 @@ module Confetti
       @splash_set       = TypedSet.new Image
       @preference_set   = TypedSet.new Preference
       @access_set       = TypedSet.new Access
+      @allow_navigation_set = TypedSet.new AllowNavigation
+      @allow_intent_set = TypedSet.new AllowIntent
       @url_scheme_set   = TypedSet.new UrlScheme
       @default_min_sdk  = 10
 
@@ -150,6 +152,12 @@ module Confetti
             browserOnly = boolean_value(attr["browserOnly"])
             launchExternal = attr["launch-external"] == "yes"
             @access_set << Access.new(attr["origin"], sub, browserOnly, launchExternal)
+
+          when "allow-navigation"
+            @allow_navigation_set << AllowNavigation.new(attr["href"])
+
+          when "allow-intent"
+            @allow_intent_set << AllowIntent.new(attr["href"])
 
           when "content"
             @content = Content.new(attr["src"], attr["type"], attr["encoding"])

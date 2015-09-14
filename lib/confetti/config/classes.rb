@@ -83,6 +83,22 @@ module Confetti
       end
     end
 
+    class AllowNavigation < Struct.new(:href)
+      def defind_attrs
+        {
+          "href" => self[ :href ]
+        }
+      end
+    end
+
+    class AllowIntent < Struct.new(:href)
+      def defind_attrs
+        {
+          "href" => self[ :href ]
+        }
+      end
+    end
+
     class Param < Struct.new(:name, :value)
       def defined_attrs
         {
