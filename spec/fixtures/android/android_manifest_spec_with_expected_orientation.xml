@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.nitobi.johngarrett"
     android:versionName="1.0"
     android:versionCode="5">
@@ -26,6 +27,6 @@
             </intent-filter>
         </activity>
     </application>
-	<uses-sdk android:minSdkVersion="2" />
+	<uses-sdk tools:overrideLibrary="org.apache.cordova" android:minSdkVersion="2" />
 
 </manifest>

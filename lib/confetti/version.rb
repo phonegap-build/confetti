@@ -1,3 +1,3 @@
 module Confetti
-  VERSION = "0.10.14"
+  VERSION = "0.10.15"
 end
