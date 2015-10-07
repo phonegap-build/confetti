@@ -105,6 +105,7 @@ describe Confetti::Template::WindowsPhone8Manifest do
 
     it "should write the file" do
         @config = Confetti::Config.new
+        @config.name.name=""
         @config.feature_set <<
             Confetti::Config::Feature.new(
                 "http://plugins.phonegap.com/ChildBrowser/2.0.1",
@@ -154,6 +155,11 @@ describe Confetti::Template::WindowsPhone8Manifest do
     it "should ensure letters are converted to numbers" do
       @config.version_string = "1.3.a"
       @template.version.should == "1.3.0.0"
+    end
+
+    it "should raise error if invalid" do
+      @config.version_string = "39333"
+      lambda { @template.version }.should raise_exception
     end
   end
 

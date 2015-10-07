@@ -13,6 +13,10 @@ module Confetti
       }
 
       def title
+        if @config.name.name.length > 50
+          raise Exception.new "App title length check failed: AppManifestInvalidTitle"
+        end
+
         @config.name.name
       end
 
@@ -51,7 +55,13 @@ module Confetti
         v = normalize_version(@config.version_string).split('.')
 
         # after the first one, each segment can only have one character
-        "#{ v[0] }.#{ v[1][0..0] }.#{ v[2][0..0] }.0"
+        version_string = "#{ v[0] }.#{ v[1][0..0] }.#{ v[2][0..0] }.0"
+
+        if version_string !~ /^\d{1,4}(\.\d{0,4}){0,3}$/
+          raise Exception.new "App version regex failed: AppManifestInvalidVersion"
+        end
+
+        version_string
       end
 
       def capabilities
