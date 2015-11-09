@@ -47,6 +47,8 @@
     <string>1.0.0</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>UIRequiresFullScreen</key>
+    <true/>
     <key>NSMainNibFile</key>
     <string></string>
     <key>NSMainNibFile~ipad</key>
