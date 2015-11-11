@@ -34,11 +34,10 @@ module Confetti
       end
     end
 
-    class Platform < Struct.new(:name, :phonegap_version)
+    class Platform < Struct.new(:name)
       def defined_attrs
         {
-          "name" => self[ :name ],
-          "phonegap-version" => self[ :phonegap_version ]
+          "name" => self[ :name ]
         }
       end
     end
