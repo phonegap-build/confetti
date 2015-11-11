@@ -23,22 +23,5 @@ module Confetti
         pref.value = v
       end
     end
-
-    # deprecated in favor of gap:plugin tags
-    # still supported for ChildBrowser
-    def legacy_plugins
-      p_name = /http:\/\/plugins[.]phonegap[.]com\/([^\/]*)\/([^\/]*)/
-
-      # find features corresponding to plugins
-      plugin_features = self.feature_set.select do |f|
-        !f.name.nil? && f.name.match(p_name)
-      end
-
-      # turn matching features into plugins
-      plugin_features.map do |f|
-        matches = f.name.match(p_name)
-        Plugin.new(matches[1], matches[2])
-      end
-    end
   end
 end
