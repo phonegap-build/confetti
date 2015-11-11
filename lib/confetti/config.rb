@@ -5,7 +5,9 @@ module Confetti
     self.extend TemplateHelper
 
     attr_accessor :package, :version_string, :version_code, :description,
-                  :height, :width, :plist_icon_set, :url_scheme_set, :default_min_sdk
+                  :height, :width, :plist_icon_set, :url_scheme_set, :default_min_sdk,
+                  :android_versioncode, :ios_cfbundleversion, :windows_package_version
+
     attr_reader :author, :viewmodes, :name, :license, :content,
                 :icon_set, :feature_set, :preference_set, :xml_doc,
                 :splash_set, :plist_icon_set, :access_set, :plugin_set,
@@ -94,9 +96,13 @@ module Confetti
 
       @xml_doc = config_doc # save reference to doc
 
-      @package = config_doc["id"]
-      @version_string = config_doc["version"]
-      @version_code = config_doc["versionCode"]
+      @package                  = config_doc["id"]
+      @version_string           = config_doc["version"]
+      @version_code             = config_doc["versionCode"]
+
+      @android_versioncode      = config_doc["android-versionCode"] 
+      @ios_cfbundleversion      = config_doc["ios-CFBundleVersion"] 
+      @windows_package_version  = config_doc["windows-packageVersion"]
 
       icon_index = 0
       splash_index = 0
