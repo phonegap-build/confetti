@@ -83,9 +83,9 @@ module Confetti
       end
 
       begin
-        config_doc = Nokogiri::XML( config_doc ) { |config| 
+        @xml_doc = Nokogiri::XML( config_doc ) { |config| 
           strict ? config.nonet.strict : config.nonet.recover
-        }.root
+        }
       rescue Nokogiri::XML::SyntaxError, TypeError, RuntimeError
         raise XMLError, "malformed config.xml"
       end
@@ -94,7 +94,8 @@ module Confetti
         raise XMLError, "no doc parsed"
       end
 
-      @xml_doc = config_doc # save reference to doc
+      @xml_doc.remove_namespaces!
+      config_doc = @xml_doc.root
 
       @package                  = config_doc["id"]
       @version_string           = config_doc["version"]
@@ -111,96 +112,111 @@ module Confetti
         attr = {}
         ele.attributes.each { |k, v| attr[k] = v.to_s }
 
-        ele_namespace = ele.namespace ? ele.namespace.href : "http://www.w3.org/ns/widgets"
+        case ele.name
+        when "name"
+          @name = Name.new(ele.text.nil? ? "" : ele.text.strip,
+                            attr["shortname"])
 
-        case ele_namespace
+        when "author"
+          @author = Author.new(ele.text.nil? ? "" : ele.text.strip,
+                                attr["href"], attr["email"])
 
-        # W3C widget elements
-        when "http://www.w3.org/ns/widgets"
-          case ele.name
-          when "name"
-            @name = Name.new(ele.text.nil? ? "" : ele.text.strip,
-                              attr["shortname"])
+        when "description"
+          @description = ele.text.nil? ? "" : ele.text.strip
 
-          when "author"
-            @author = Author.new(ele.text.nil? ? "" : ele.text.strip,
-                                  attr["href"], attr["email"])
+        when "feature"
+          feature = Feature.new(attr["name"], attr["required"])
 
-          when "description"
-            @description = ele.text.nil? ? "" : ele.text.strip
-
-          when "icon"
-            icon_index += 1
-            @icon_set << Image.new(attr["src"], attr["height"], attr["width"],
-                                    attr, icon_index)
-            # used for the info.plist file
-            @plist_icon_set << attr["src"]
-
-          when "feature"
-            feature = Feature.new(attr["name"], attr["required"])
-
-            ele.search("param").each do |param|
-              feature.param_set << Param.new(param["name"], param["value"])
-            end
-
-            @feature_set  << feature
-
-          when "preference"
-            @preference_set << Preference.new(attr["name"], attr["value"],
-                                              attr["readonly"])
-
-          when "license"
-            @license = License.new(ele.text.nil? ? "" : ele.text.strip,
-                                   attr["href"])
-
-          when "access"
-            sub = boolean_value(attr["subdomains"], true)
-            browserOnly = boolean_value(attr["browserOnly"])
-            launchExternal = attr["launch-external"] == "yes"
-            @access_set << Access.new(attr["origin"], sub, browserOnly, launchExternal)
-
-          when "allow-navigation"
-            @allow_navigation_set << AllowNavigation.new(attr["href"])
-
-          when "allow-intent"
-            @allow_intent_set << AllowIntent.new(attr["href"])
-
-          when "content"
-            @content = Content.new(attr["src"], attr["type"], attr["encoding"])
-
+          ele.search("param").each do |param|
+            feature.param_set << Param.new(param["name"], param["value"])
           end
 
-        # PhoneGap extensions (gap:)
-        when "http://phonegap.com/ns/1.0"
-          case ele.name
-          when "platform"
-            @platform_set << Platform.new(attr["name"])
-          when "splash"
-            next if attr["src"].nil? or attr["src"].empty?
-            splash_index += 1
-            @splash_set << Image.new(attr["src"], attr["height"], attr["width"],
-                                      attr, splash_index)
-          when "url-scheme"
-            schms = ele.search('scheme').map { |a| a.text }
-            schms.reject! { |a| a.nil? || a.empty? }
-            next if schms.empty?
-            @url_scheme_set << UrlScheme.new(schms, attr["name"], attr["role"])
-            
-          when "plugin"
-            next if attr["name"].nil? or attr["name"].empty?
-            plugin = Plugin.new(
-              attr["name"], 
-              attr["version"], 
-              attr["platform"] || attr["platforms"], 
-              attr["source"]
-            )
-            ele.search("param").each do |param|
-              plugin.param_set << Param.new(param["name"], param["value"])
-            end
-            @plugin_set << plugin
-          end
+          @feature_set  << feature
+
+        when "license"
+          @license = License.new(ele.text.nil? ? "" : ele.text.strip,
+                                 attr["href"])
+
+        when "access"
+          sub = boolean_value(attr["subdomains"], true)
+          browserOnly = boolean_value(attr["browserOnly"])
+          launchExternal = attr["launch-external"] == "yes"
+          @access_set << Access.new(attr["origin"], sub, browserOnly, launchExternal)
+
+        when "allow-navigation"
+          @allow_navigation_set << AllowNavigation.new(attr["href"])
+
+        when "allow-intent"
+          @allow_intent_set << AllowIntent.new(attr["href"])
+
+        when "content"
+          @content = Content.new(attr["src"], attr["type"], attr["encoding"])
+
+        when "platform"
+          platform = attr["name"]
+          platform.gsub! "wp8","winphone" if !platform.nil?
+          @platform_set << Platform.new(platform)
+
+        when "url-scheme"
+          schms = ele.search('scheme').map { |a| a.text }
+          schms.reject! { |a| a.nil? || a.empty? }
+          next if schms.empty?
+          @url_scheme_set << UrlScheme.new(schms, attr["name"], attr["role"])
         end
       end
+
+      config_doc.xpath('//plugin').each { |ele|
+        next if ele["name"].nil? or ele["name"].empty?
+        
+        attrs = get_attributes(ele)
+        plugin = Plugin.new(attrs["name"], attrs["version"], attrs["platform"], attrs["source"])
+        ele.search("param").each do |param|
+          plugin.param_set << Param.new(param["name"], param["value"])
+        end
+        @plugin_set << plugin
+      }
+
+      # parse preferences
+      config_doc.xpath('//preference').each { |ele|
+        next if ele["name"].nil? or ele["name"].empty?
+        
+        attrs = get_attributes(ele)
+        @preference_set << Preference.new(attrs["name"], attrs["value"], attrs["readonly"], attrs["platform"])
+      }
+
+      # parse icons
+      config_doc.xpath('//icon').each { |ele|
+        next if ele["src"].nil? or ele["src"].empty?
+
+        attrs = get_attributes(ele)
+
+        icon_index += 1
+        @icon_set << Image.new(attrs["src"], attrs["height"], attrs["width"], attrs, icon_index)
+        @plist_icon_set << attrs["src"]
+      }
+
+      # parse splashes
+      config_doc.xpath('//splash').each { |ele|
+        next if ele["src"].nil? or ele["src"].empty?
+        
+        attrs = get_attributes(ele)
+
+        splash_index += 1
+        @splash_set << Image.new(attrs["src"], attrs["height"], attrs["width"], attrs, splash_index)
+      }
+    end
+
+    # get attributes from the element as well as replace wp8 with winphone
+    def get_attributes element
+      attrs = {}
+      element.attributes.each { |k, v| attrs[k] = v.to_s }
+
+      platform = element.parent["name"].to_s if element.parent.name == 'platform'
+      if platform.nil?
+        platform = element["platform"].nil? ? nil : element["platform"].to_s
+      end
+      attrs['platform'] = platform.gsub("wp8","winphone") if !platform.nil?
+      attrs
     end
 
     def icon
@@ -217,9 +233,9 @@ module Confetti
 
     # simple helper for grabbing chosen orientation, or the default
     # returns one of :portrait, :landscape, or :default
-    def orientation
+    def orientation platform
       values = [:portrait, :landscape, :default]
-      choice = preference :orientation
+      choice = preference :orientation, platform
 
       unless choice and values.include?(choice)
         :default
@@ -230,19 +246,36 @@ module Confetti
 
     # helper to retrieve a preference's value
     # returns nil if the preference doesn't exist
-    def preference name
-      pref = preference_obj(name)
+    def preference name, platform, use_default=true
+      pref = preference_object name, platform, use_default
 
       if pref && pref.value && !pref.value.empty?
         pref.value.to_sym
       end
     end
 
-    # mostly an internal method to help with weird cases
-    # in particular #phonegap_version
-    def preference_obj name
-      name = name.to_s
-      @preference_set.detect { |pref| pref.name == name }
+    # helper to retrieve a preference's value
+    # returns nil if the preference doesn't exist
+    def preference_object name, platform, use_default=true
+      pref = @preference_set.select { |pref| 
+        pref.name == name.to_s && pref.platform == platform.to_s 
+      }.last
+      
+      return pref if !use_default
+
+      pref ||= @preference_set.select { |pref| 
+        pref.name == name.to_s && pref.platform == nil 
+      }.last
+    end
+
+    # helper to retrieve all preferences for platform
+    def preferences platform
+      result=[]
+      @preference_set.map{|pref| pref[:name]}.uniq.each { |pref_name|
+        pref = preference_object(pref_name, platform)
+        result << pref if pref
+      }
+      result
     end
 
     def feature name

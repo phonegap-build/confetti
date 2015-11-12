@@ -56,7 +56,7 @@ module Confetti
       end
 
       def app_orientation
-        ORIENTATIONS_MAP[@config.orientation]
+        ORIENTATIONS_MAP[@config.orientation(:android)]
       end
 
       def permissions
@@ -87,13 +87,13 @@ module Confetti
 
       def install_location
         valid_choices = %w(internalOnly auto preferExternal)
-        choice = @config.preference("android-installLocation").to_s
+        choice = @config.preference("android-installLocation", :android).to_s
 
         valid_choices.include?(choice) ? choice : "internalOnly"
       end
 
       def min_sdk_version_attribute
-        choice = @config.preference("android-minSdkVersion") || @config.default_min_sdk
+        choice = @config.preference("android-minSdkVersion", :android) || @config.default_min_sdk
 
         if int_value?(choice)
           "android:minSdkVersion=\"#{ choice }\" "
@@ -101,7 +101,7 @@ module Confetti
       end
 
       def max_sdk_version_attribute
-        choice = @config.preference("android-maxSdkVersion")
+        choice = @config.preference("android-maxSdkVersion", :android)
 
         if int_value?(choice)
           "android:maxSdkVersion=\"#{ choice }\" "
@@ -109,7 +109,7 @@ module Confetti
       end
 
       def target_sdk_version_attribute
-        choice = @config.preference("android-targetSdkVersion")
+        choice = @config.preference("android-targetSdkVersion", :android)
 
         if int_value?(choice)
           "android:targetSdkVersion=\"#{ choice }\" "
@@ -117,7 +117,7 @@ module Confetti
       end
 
       def window_soft_input_mode
-        choice = @config.preference("android-windowSoftInputMode").to_s
+        choice = @config.preference("android-windowSoftInputMode", :android).to_s
 
         choice == "" ? "stateUnspecified|adjustUnspecified" : choice
       end

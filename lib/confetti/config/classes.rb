@@ -61,12 +61,13 @@ module Confetti
       end
     end
 
-    class Preference < Struct.new(:name, :value, :readonly)
+    class Preference < Struct.new(:name, :value, :readonly, :platform)
       def defined_attrs
         {
           "name" => self[ :name ],
           "value" => self[ :value ],
-          "readonly" => self[ :readonly ]
+          "readonly" => self[ :readonly ],
+          "platform" => self[ :platform ]
         }
       end
     end

@@ -56,15 +56,15 @@ module Confetti
       end
 
       def app_orientations
-        ORIENTATIONS_MAP[@config.orientation]
+        ORIENTATIONS_MAP[@config.orientation(:ios)]
       end
 
      def exit_on_suspend?
-        @config.preference("exit-on-suspend") == :true
+        @config.preference("exit-on-suspend", :ios) == :true
      end
 
       def fullscreen?
-        @config.preference(:fullscreen) == :true
+        @config.preference(:fullscreen, :ios) == :true
       end
 
       def url_schemes
@@ -82,11 +82,11 @@ module Confetti
       end
 
       def prerendered_icon?
-        @config.preference("prerendered-icon") == :true
+        @config.preference("prerendered-icon", :ios) == :true
       end
 
       def statusbar_style
-        pref = @config.preference("ios-statusbarstyle")
+        pref = @config.preference("ios-statusbarstyle", :ios)
         if pref
           STATUS_BARS[pref]
         end

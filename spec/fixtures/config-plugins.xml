@@ -50,8 +50,11 @@ THE SOFTWARE.</license>
 
   <access origin="*" />
 
-  <gap:plugin name="ChildBrowser" source="internal" platforms="ios,android" />
-  <gap:plugin name="PushNotifications" version="~2.0" platforms="android" />
+  <platform name="ios">
+  	<gap:plugin name="ChildBrowser" source="internal" />
+  </platform>
+
+  <gap:plugin name="PushNotifications" version="~2.0" platform="android" />
 
   <gap:plugin name="FBConnect" version="~1" source="external" >
     <param name="APIKey" value="SOMEKEY" />

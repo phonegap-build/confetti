@@ -80,7 +80,7 @@ module Confetti
         }
 
         if @config.feature_set.empty? and
-            @config.preference(:permissions) != :none
+            @config.preference(:permissions, :winphone) != :none
             permissions = default_permissions
         end
 

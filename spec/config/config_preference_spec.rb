@@ -27,7 +27,8 @@ describe Confetti::Config::Preference do
     pref.defined_attrs.should == {
       "name" => "Some Preference",
       "value" => "Some Setting",
-      "readonly" => false
+      "readonly" => false,
+      "platform" => nil
     }
   end
 end

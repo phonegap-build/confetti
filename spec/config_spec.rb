@@ -275,7 +275,7 @@ describe Confetti::Config do
 
       it "should keep a reference to the xml doc" do
         @config.xml_doc.should_not == nil
-        @config.xml_doc.class.should == Nokogiri::XML::Element
+        @config.xml_doc.class.should == Nokogiri::XML::Document
       end
 
       it "should populate the app's package when present" do
@@ -501,7 +501,7 @@ describe Confetti::Config do
         end
 
         it "should set the platforms properties correctly" do
-          @child.platforms.should == "ios,android"
+          @child.platforms.should == "ios"
           @push.platforms.should == "android"
           @fbconnect.platforms.should be_nil
         end
@@ -597,7 +597,7 @@ describe Confetti::Config do
   describe "orientation helper" do
     it "should be :default with none set" do
       c = Confetti::Config.new
-      c.orientation.should be :default
+      c.orientation(:ios).should be :default
     end
 
     describe "with an orientation preference" do
@@ -608,22 +608,22 @@ describe Confetti::Config do
       end
 
       it "should be :default when no value is set" do
-        @config.orientation.should be :default
+        @config.orientation(:ios).should be :default
       end
 
       it "should be :landscape when the value is 'landscape'" do
         @orientation_pref.value = "landscape"
-        @config.orientation.should be :landscape
+        @config.orientation(:ios).should be :landscape
       end
 
       it "should be :portrait when the value is 'portrait'" do
         @orientation_pref.value = "portrait"
-        @config.orientation.should be :portrait
+        @config.orientation(:ios).should be :portrait
       end
 
       it "should be :default when the value is unexpected" do
         @orientation_pref.value = "topwise"
-        @config.orientation.should be :default
+        @config.orientation(:ios).should be :default
       end
     end
   end
@@ -636,25 +636,25 @@ describe Confetti::Config do
     end
 
     it "should return the value of the specified preference" do
-      @config.preference(:permissions).should == :none
+      @config.preference(:permissions, :ios).should == :none
     end
 
     it "should be nil when the preference is not set" do
-      @config.preference(:size).should be_nil
+      @config.preference(:size, :ios).should be_nil
     end
 
     it "should be nil when the preference has no value" do
       pref = Confetti::Config::Preference.new "privacy"
       @config.preference_set << pref
 
-      @config.preference(:privacy).should be_nil
+      @config.preference(:privacy, :ios).should be_nil
     end
 
     it "should be nil when the preference has an empty string as the value" do
       pref = Confetti::Config::Preference.new "nonsense", ""
       @config.preference_set << pref
 
-      @config.preference(:nonsense).should be_nil
+      @config.preference(:nonsense, :ios).should be_nil
     end
   end
 
