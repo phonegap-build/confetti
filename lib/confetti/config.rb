@@ -82,6 +82,8 @@ module Confetti
         raise XMLError, "malformed config.xml"
       end
 
+      config_doc.gsub! "gap:plugin", "gap_plugin"
+
       begin
         @xml_doc = Nokogiri::XML( config_doc ) { |config| 
           strict ? config.nonet.strict : config.nonet.recover
@@ -165,7 +167,7 @@ module Confetti
         end
       end
 
-      config_doc.xpath('//plugin').each { |ele|
+      config_doc.xpath('//gap_plugin').each { |ele|
         next if ele["name"].nil? or ele["name"].empty?
         
         attrs = get_attributes(ele)
