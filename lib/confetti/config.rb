@@ -82,8 +82,10 @@ module Confetti
         raise XMLError, "malformed config.xml"
       end
 
+      config_doc = config_doc.gsub("gap:plugin", "gap_plugin") if config_doc
+
       begin
-        @xml_doc = Nokogiri::XML( config_doc ) { |config| 
+        @xml_doc = Nokogiri::XML( config_doc ) { |config|
           strict ? config.nonet.strict : config.nonet.recover
         }
       rescue Nokogiri::XML::SyntaxError, TypeError, RuntimeError
@@ -165,18 +167,26 @@ module Confetti
         end
       end
 
-      # parse plugins
+      # parse gap:plugin
+      config_doc.xpath('//gap_plugin').each { |ele|
+        next if ele["name"].nil? or ele["name"].empty?
+        
+        attrs = get_attributes(ele)
+
+        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"], attrs["platform"], attrs["source"])
+        ele.search("param").each do |param|
+          plugin.param_set << Param.new(param["name"], param["value"])
+        end
+        @plugin_set << plugin
+      }
+
+      # parse plugin
       config_doc.xpath('//plugin').each { |ele|
         next if ele["name"].nil? or ele["name"].empty?
         
         attrs = get_attributes(ele)
 
-        # if spec is present grab it from npm
-        version = attrs["spec"] || attrs["version"]
-        source = attrs["source"]
-        source = "npm" if attrs["spec"]
-
-        plugin = Plugin.new(attrs["name"], version, attrs["platform"], source)
+        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"], attrs["platform"], attrs["source"] || "npm")
         ele.search("param").each do |param|
           plugin.param_set << Param.new(param["name"], param["value"])
         end
