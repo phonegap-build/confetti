@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    confetti (0.11.5)
+    confetti (0.11.6)
       mustache (~> 0.11.2)
       nokogiri (~> 1.6.3.1)
 
@@ -28,3 +28,6 @@ PLATFORMS
 DEPENDENCIES
   confetti!
   rspec (~> 2.6.0)
+
+BUNDLED WITH
+   1.10.4
