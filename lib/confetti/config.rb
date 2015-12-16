@@ -173,7 +173,7 @@ module Confetti
         
         attrs = get_attributes(ele)
 
-        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"], attrs["platform"], attrs["source"] || "pgb")
+        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"] || attrs["src"], attrs["platform"], attrs["source"] || "pgb")
         ele.search("param").each do |param|
           plugin.param_set << Param.new(param["name"], param["value"])
         end
@@ -186,7 +186,7 @@ module Confetti
         
         attrs = get_attributes(ele)
 
-        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"], attrs["platform"], attrs["source"] || "npm")
+        plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"] || attrs["src"], attrs["platform"], attrs["source"] || "npm")
         ele.search("param").each do |param|
           plugin.param_set << Param.new(param["name"], param["value"])
         end
