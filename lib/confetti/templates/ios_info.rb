@@ -32,8 +32,12 @@ module Confetti
         @config.package
       end
 
-      def bundle_version
+      def short_bundle_version
         @config.version_string
+      end
+
+      def bundle_version
+        @config.ios_cfbundleversion || @config.version_string
       end
 
       def product_name
