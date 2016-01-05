@@ -47,10 +47,11 @@ module Confetti
       end
 
       def version_code
-        if @config.version_code.nil?
+        config_version_code = @config.android_versioncode || @config.version_code
+        if config_version_code.nil?
           '1'
         else
-          int = @config.version_code.to_i
+          int = config_version_code.to_i
           int == 0 ? '1' : int.to_s
         end
       end
