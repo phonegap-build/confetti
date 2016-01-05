@@ -270,6 +270,24 @@ describe Confetti::Config do
         it "should set the license to the empty string" do
           @config.license.text.should == ""
         end
+      end
+
+      describe "uses version overrides" do
+        before do
+          @config.populate_from_xml(fixture_dir + "/config_versions.xml")
+        end
+        
+        it "should populate the app's android_versioncode when present" do
+          @config.android_versioncode.should == "5"
+        end
+
+        it "should populate the app's ios_cfbundleversion when present" do
+          @config.ios_cfbundleversion.should == "10"
+        end
+
+        it "should populate the app's windows_package_version when present" do
+          @config.windows_package_version.should == "15"
+        end
 
       end
 
@@ -496,7 +514,7 @@ describe Confetti::Config do
 
         it "should set the source properties correctly" do
           @child.source.should == "internal"
-          @push.source.should be_nil
+          @push.source.should == "pgb"
           @fbconnect.source.should == "external"
         end
 

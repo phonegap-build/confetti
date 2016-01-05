@@ -64,6 +64,10 @@ describe Confetti::Template::AndroidManifest do
         @template.version.should == "0.0.1"
       end
 
+      it "should use the default version code" do
+        @template.version_code.should == "1"
+      end
+
       it "should render the correct AndroidManifest" do
         @template.render.should == File.read("#{ fixture_dir }/android/android_manifest_spec.xml")
       end
@@ -339,5 +343,12 @@ describe Confetti::Template::AndroidManifest do
       @config.version_code = "2.0.0"
       @template.version_code.should == "2"
     end
+
+    it "should allow override with android_versioncode" do
+      @config.version_code = "3"
+      @config.android_versioncode = "2"
+      @template.version_code.should == "2"
+    end
+
   end
 end

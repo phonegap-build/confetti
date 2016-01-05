@@ -146,6 +146,11 @@ describe Confetti::Template::WindowsPhone8Manifest do
       @template.version.should == "1.0.0.0"
     end
 
+    it "should allow override with windows_package_version" do
+      @config.windows_package_version = "12"
+      @template.version.should == "12.0.0.0"
+    end
+
     it "should ensure the non-initial numbers are one digit" do
       # THIS IS STUPID
       @config.version_string = "2012.05.20"

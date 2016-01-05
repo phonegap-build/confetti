@@ -63,6 +63,15 @@ describe Confetti::Template::IosInfo do
         @template.bundle_version.should == "1.0.0"
       end
 
+      it "should allow override with ios_cfbundleversion" do
+        @config.ios_cfbundleversion = "2.0.0"
+        @template.bundle_version.should == "2.0.0"
+      end
+
+      it "should set bundle_version correctly" do
+        @template.short_bundle_version.should == "1.0.0"
+      end
+
       it "should render the correct Info.plist" do
         @template.render.should == File.read("#{ fixture_dir }/ios/ios_info_spec.plist")
       end
