@@ -30,6 +30,7 @@ require 'confetti/templates/android_strings'
 require 'confetti/templates/ios_info'
 require 'confetti/templates/ios_remote_plist'
 require 'confetti/templates/windows_phone8_manifest'
+require 'confetti/templates/firefoxos_manifest'
 
 require 'confetti/template_helper'
 
