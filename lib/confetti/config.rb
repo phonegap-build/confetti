@@ -169,8 +169,6 @@ module Confetti
 
       # parse gap:plugin
       config_doc.xpath('//gap_plugin').each { |ele|
-        next if ele["name"].nil? or ele["name"].empty?
-        
         attrs = get_attributes(ele)
 
         plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"] || attrs["src"], attrs["platform"], attrs["source"] || "pgb")
@@ -182,8 +180,6 @@ module Confetti
 
       # parse plugin
       config_doc.xpath('//plugin').each { |ele|
-        next if ele["name"].nil? or ele["name"].empty?
-        
         attrs = get_attributes(ele)
 
         plugin = Plugin.new(attrs["name"], attrs["spec"] || attrs["version"] || attrs["src"], attrs["platform"], attrs["source"] || "npm")
