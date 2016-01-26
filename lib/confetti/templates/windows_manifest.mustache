@@ -52,6 +52,9 @@
     </Application>
   </Applications>
   <Capabilities>
+    {{#capabilities}}
+    <Capability Name="{{name}}" />
+    {{/capabilities}}
     <Capability Name="internetClientServer" />
   </Capabilities>
 </Package>

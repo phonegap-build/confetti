@@ -55,6 +55,17 @@ describe Confetti::Template::WindowsManifest do
             "#{fixture_dir}/windows/windows.phone.appxmanifest"
           )
       end
+
+      it "should add a feature when a valid one is found" do
+        @config = Confetti::Config.new
+        feature = Confetti::Config::Feature.new(
+            "http://api.phonegap.com/1.0/geolocation",
+            "true"
+            )
+        @config.feature_set << feature 
+        @template = @template_class.new @config
+        @template.capabilities.should == [{:name=>"location"}]
+      end
     end
   end
 

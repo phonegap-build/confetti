@@ -3,6 +3,13 @@ module Confetti
     class WindowsManifest < Base
       include VersionHelper
 
+      GAP_PERMISSIONS_MAP = {
+        'camera' => %w{webcam},
+        'contacts' => %w{contacts},
+        'geolocation' => %w{location},
+        'network' => %w{internetClient},
+        'media' => %w{microphone},
+      }
 
       def title
         @config.name.name.gsub(/\s+/, "")
@@ -40,6 +47,34 @@ module Confetti
 
       def output_filename 
         "package.phone.appxmanifest"
+      end
+
+      def capabilities
+        default_permissions = %w{}
+        permissions = []                                                
+        capabilities = []                                                
+        phonegap_api = /http\:\/\/api.phonegap.com\/1[.]0\/(\w+)/          
+        filtered_features = @config.feature_set.clone
+
+        filtered_features.each { |f|
+            next if f.name.nil?
+            matches = f.name.match(phonegap_api)
+            next if matches.nil? or matches.length < 1 
+            next unless GAP_PERMISSIONS_MAP.has_key?(matches[1])
+            permissions << matches[1]
+        }
+
+        if @config.feature_set.empty? and
+            @config.preference(:permissions, :winphone) != :none
+            permissions = default_permissions
+        end
+
+        permissions.each { |p|
+            capabilities.concat(GAP_PERMISSIONS_MAP[p])
+        }
+      
+        capabilities.sort! 
+        capabilities.map { |f| { :name => f } }
       end
 
     end

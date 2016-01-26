@@ -74,7 +74,7 @@ describe Confetti::Template::WindowsPhone8Manifest do
           )
       end
 
-      it "should add a feature when a valid on is found" do
+      it "should add a feature when a valid one is found" do
         @config = Confetti::Config.new
         feature = Confetti::Config::Feature.new(
             "http://api.phonegap.com/1.0/geolocation",
