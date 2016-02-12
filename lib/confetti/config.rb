@@ -156,7 +156,7 @@ module Confetti
 
         when "platform"
           platform = attr["name"]
-          platform.gsub! "wp8","winphone" if !platform.nil?
+          platform.gsub! /^(wp8|windows)$/, "winphone" if !platform.nil?
           @platform_set << Platform.new(platform)
 
         when "url-scheme"
@@ -219,7 +219,7 @@ module Confetti
       }
     end
 
-    # get attributes from the element as well as replace wp8 with winphone
+    # get attributes from the element as well as replace wp8/windows with winphone
     def get_attributes element
       attrs = {}
       element.attributes.each { |k, v| attrs[k] = v.to_s }
@@ -228,7 +228,7 @@ module Confetti
       if platform.nil?
         platform = element["platform"].nil? ? nil : element["platform"].to_s
       end
-      attrs['platform'] = platform.gsub("wp8","winphone") if !platform.nil?
+      attrs['platform'] = platform.gsub(/^(wp8|windows)$/, "winphone") if !platform.nil?
       attrs
     end
 
