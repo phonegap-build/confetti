@@ -22,17 +22,22 @@ module Confetti
       def guid
         package = @config.package
         package ||= 'com.example.app'
-        guid = Digest::MD5.hexdigest package 
-        res = "#{ guid[0..7] }-#{ guid[8..11] }-"
-        res << "#{ guid[12..15] }-#{ guid[16..19] }-"
-        res << "#{ guid[20,guid.length-1]}"
+        generate_guid package
       end
       
       def producerguid
-        package = @config.package
-        package ||= 'com.example.app'
-        package = "#{package}" + "second";
-        guid = Digest::MD5.hexdigest package 
+        if @config.windows_publisher_id
+          @config.windows_publisher_id
+        else
+          package = @config.package
+          package ||= 'com.example.app'
+          package = "#{package}" + "second";
+          generate_guid package
+        end
+      end
+
+      def generate_guid val
+        guid = Digest::MD5.hexdigest val 
         res = "#{ guid[0..7] }-#{ guid[8..11] }-"
         res << "#{ guid[12..15] }-#{ guid[16..19] }-"
         res << "#{ guid[20,guid.length-1]}"
