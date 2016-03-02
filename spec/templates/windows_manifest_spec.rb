@@ -51,6 +51,7 @@ describe Confetti::Template::WindowsManifest do
       it "should render a valid windows phone appxmanifest" do
         @config = Confetti::Config.new "#{fixture_dir}/config.xml"
         @template = @template_class.new @config
+        @template.template = File.read("./lib/confetti/templates/package.phone.appxmanifest.mustache")
         @template.render.should == File.read(
             "#{fixture_dir}/windows/windows.phone.appxmanifest"
           )
@@ -60,11 +61,19 @@ describe Confetti::Template::WindowsManifest do
 
   describe "should write a valid manifest file" do
 
+    before do
+      @output_manifest = File.expand_path("#{fixture_dir}/windows/output.appxmanifest")
+      @expected_manifest = File.expand_path("#{fixture_dir}/windows/windows.phone.appxmanifest")
+      @config = Confetti::Config.new "#{fixture_dir}/config.xml"
+    end
+
     it "should write the file" do
-        @config = Confetti::Config.new
-        @config.name.name=""
-        @template = @template_class.new @config
-        lambda { @template.render }.should_not raise_error
+        @config.write_windows_manifest @output_manifest, "package.phone.appxmanifest"
+        File.read(@output_manifest).should == File.read(@expected_manifest)
+    end
+
+    after do
+      FileUtils.rm(@output_manifest)
     end
   end
 

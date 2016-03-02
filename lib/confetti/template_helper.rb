@@ -19,6 +19,11 @@ module Confetti
 
           template = send generate_method
 
+          if !args[1].nil?
+            template_file = File.expand_path(File.dirname(__FILE__) + "/templates/#{args[1]}.mustache")
+            template.template = File.read(template_file)
+          end
+          
           begin
             output = template.render
             filepath ||= File.join(Dir.pwd, template.output_filename)
