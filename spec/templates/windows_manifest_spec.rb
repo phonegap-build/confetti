@@ -55,17 +55,6 @@ describe Confetti::Template::WindowsManifest do
             "#{fixture_dir}/windows/windows.phone.appxmanifest"
           )
       end
-
-      it "should add a feature when a valid one is found" do
-        @config = Confetti::Config.new
-        feature = Confetti::Config::Feature.new(
-            "http://api.phonegap.com/1.0/geolocation",
-            "true"
-            )
-        @config.feature_set << feature 
-        @template = @template_class.new @config
-        @template.capabilities.should == [{:name=>"location"}]
-      end
     end
   end
 
@@ -74,16 +63,6 @@ describe Confetti::Template::WindowsManifest do
     it "should write the file" do
         @config = Confetti::Config.new
         @config.name.name=""
-        @config.feature_set <<
-            Confetti::Config::Feature.new(
-                "http://plugins.phonegap.com/ChildBrowser/2.0.1",
-                'true'
-                )
-        @config.feature_set <<
-            Confetti::Config::Feature.new(
-                "http://api.phonegap.com/1.0/geolocation",
-                'true'
-                )
         @template = @template_class.new @config
         lambda { @template.render }.should_not raise_error
     end

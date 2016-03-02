@@ -52,8 +52,6 @@
     </Application>
   </Applications>
   <Capabilities>
-    <Capability Name="location" />
-    <Capability Name="webcam" />
-    <Capability Name="internetClientServer" />
+    <Capability Name="internetClient" />
   </Capabilities>
 </Package>
