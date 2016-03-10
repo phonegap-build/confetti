@@ -7,7 +7,7 @@ module Confetti
     attr_accessor :package, :version_string, :version_code, :description,
                   :height, :width, :plist_icon_set, :url_scheme_set, :default_min_sdk,
                   :android_versioncode, :ios_cfbundleversion, :windows_package_version,
-                  :windows_publisher_id
+                  :windows_publisher_id, :windows_identity_name
 
     attr_reader :author, :viewmodes, :name, :license, :content,
                 :icon_set, :feature_set, :preference_set, :xml_doc,

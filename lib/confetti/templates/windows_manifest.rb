@@ -4,11 +4,24 @@ module Confetti
       include VersionHelper
 
       def title
-        @config.name.name.gsub(/\s+/, "")
+        @config.name.name.strip
+      end
+
+      def safe_title
+        title.tr(' ', '')
       end
 
       def author
         @config.author.name ? @config.author.name[0..49] : ""
+      end
+
+      def identity_name
+        pref = @config.preference("windows-identity-name", :windows)
+        if !pref.nil?
+          pref
+        else
+          "#{ author.tr(' ', '') }.#{ title.tr(' ', '') }"
+        end
       end
 
       def guid

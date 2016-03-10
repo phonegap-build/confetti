@@ -18,7 +18,7 @@
        under the License.
 -->
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="{{guid}}" Version="{{ version }}" Publisher="CN={{ author }}" />
+  <Identity Name="{{ identity_name }}" Version="{{ version }}" Publisher="CN={{ producerguid }}" />
   <Properties>
     <DisplayName>{{ title }}</DisplayName>
     <PublisherDisplayName>{{ author }}</PublisherDisplayName>
@@ -32,7 +32,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="{{ title }}" StartPage="www/index.html">
+    <Application Id="{{ safe_title }}" StartPage="www/index.html">
       <m2:VisualElements DisplayName="{{ title }}" 
                          Description="CordovaApp"
                          ForegroundText="light"
