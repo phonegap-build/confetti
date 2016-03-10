@@ -4,11 +4,19 @@ module Confetti
       include VersionHelper
 
       def title
-        @config.name.name.gsub(/\s+/, "")
+        @config.name.name.strip
+      end
+
+      def safe_title
+        title.tr(' ', '')
       end
 
       def author
         @config.author.name ? @config.author.name[0..49] : ""
+      end
+
+      def identity_name
+        "#{ author.tr(' ', '') }.#{ title.tr(' ', '') }"
       end
 
       def guid
