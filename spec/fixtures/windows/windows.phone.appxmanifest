@@ -18,10 +18,10 @@
        under the License.
 -->
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="6c724dc0-52a1-7928-dc98-6b05e95fb30e" Version="1.0.0.0" Publisher="CN=Andrew Lunny" />
+  <Identity Name="AndrewLunny.ConfettiSampleApp" Version="1.0.0.0" Publisher="CN=5679a97b-f03e-3ae7-aa12-dfcb71c12166" />
   <mp:PhoneIdentity PhoneProductId="6c724dc0-52a1-7928-dc98-6b05e95fb30e" PhonePublisherId="5679a97b-f03e-3ae7-aa12-dfcb71c12166" />
   <Properties>
-    <DisplayName>ConfettiSampleApp</DisplayName>
+    <DisplayName>Confetti Sample App</DisplayName>
     <PublisherDisplayName>Andrew Lunny</PublisherDisplayName>
     <Logo>images\StoreLogo.png</Logo>
   </Properties>
@@ -34,7 +34,7 @@
   </Resources>
   <Applications>
     <Application Id="ConfettiSampleApp" StartPage="www/index.html">
-      <m3:VisualElements DisplayName="ConfettiSampleApp"
+      <m3:VisualElements DisplayName="Confetti Sample App"
                          Square150x150Logo="images\Square150x150Logo.png"
                          Square44x44Logo="images\Square44x44Logo.png"
                          Description="CordovaApp"
