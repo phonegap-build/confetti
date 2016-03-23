@@ -3,27 +3,6 @@ module Confetti
     class AndroidManifest < Base
       include JavaChecks
 
-      GAP_PERMISSIONS_MAP = {
-        "camera"        => %w{CAMERA},
-        "notification"  => %w{VIBRATE},
-        "geolocation"   => %w{ACCESS_COARSE_LOCATION
-                              ACCESS_FINE_LOCATION
-                              ACCESS_LOCATION_EXTRA_COMMANDS},
-        "media"         => %w{RECORD_AUDIO
-                              RECORD_VIDEO
-                              MODIFY_AUDIO_SETTINGS},
-        "contacts"      => %w{READ_CONTACTS
-                              WRITE_CONTACTS
-                              GET_ACCOUNTS},
-        "file"          => %w{WRITE_EXTERNAL_STORAGE},
-        "network"       => %w{ACCESS_NETWORK_STATE},
-        "battery"       => %w{BROADCAST_STICKY}
-      }
-
-      GAP_FEATURES_MAP = {
-        "camera"        => %w{camera}
-      }
-
       ORIENTATIONS_MAP = {
         :default    => "unspecified",
         :landscape  => "landscape",
@@ -58,32 +37,6 @@ module Confetti
 
       def app_orientation
         ORIENTATIONS_MAP[@config.orientation(:android)]
-      end
-
-      def permissions
-        translate_feature GAP_PERMISSIONS_MAP
-      end
-
-      def features
-        translate_feature GAP_FEATURES_MAP
-      end
-
-      def translate_feature map
-        features = []
-        phonegap_api = /http\:\/\/api.phonegap.com\/1[.]0\/(\w+)/
-        feature_names = @config.feature_set.map { |f| f.name }
-        feature_names = feature_names - [nil]
-        feature_names.sort
-
-        feature_names.each do |f|
-          feature_name = f.match(phonegap_api)[1] if f.match(phonegap_api)
-          associated_features = map[feature_name]
-
-          features.concat(associated_features) if associated_features
-        end
-
-        features.sort!
-        features.map { |f| { :name => f } }
       end
 
       def install_location
