@@ -89,19 +89,6 @@ describe Confetti::Template::AndroidManifest do
       @template = @template_class.new(@config)
     end
 
-    it "should return all of the permissions" do
-      # 1 camera, 1 network, 3 media
-      @template.permissions.size.should be 5
-    end
-
-    # its dumb, but lets me test
-    it "should be sorted alphabetically" do
-      expected = ["ACCESS_NETWORK_STATE", "CAMERA", "MODIFY_AUDIO_SETTINGS", "RECORD_AUDIO", "RECORD_VIDEO"]
-      permission_names = @template.permissions.map { |f| f[:name] }
-
-      permission_names.should == expected
-    end
-
     describe "when preference specifies no permissions" do
       before do
         bare_config = "#{ fixture_dir }/configs/config_bare.xml"
@@ -109,7 +96,7 @@ describe Confetti::Template::AndroidManifest do
         @template = @template_class.new(@config)
       end
 
-      it "should only render the INTERNET permission" do
+      it "should render no permissions when permissions pref is set to none" do
         bare_manifest = File.read "#{ fixture_dir }/android/AndroidManifest_bare.xml"
         @template.render.should == bare_manifest
       end
