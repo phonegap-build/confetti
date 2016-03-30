@@ -39,10 +39,6 @@ module Confetti
         ORIENTATIONS_MAP[@config.orientation(:android)]
       end
 
-      def no_permissions?
-        @config.preference("permissions", :android).to_s == 'none'
-      end
-
       def install_location
         valid_choices = %w(internalOnly auto preferExternal)
         choice = @config.preference("android-installLocation", :android).to_s

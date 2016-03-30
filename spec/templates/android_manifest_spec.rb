@@ -96,7 +96,7 @@ describe Confetti::Template::AndroidManifest do
         @template = @template_class.new(@config)
       end
 
-      it "should render no permissions when permissions pref is set to none" do
+      it "should render the default permissions" do
         bare_manifest = File.read "#{ fixture_dir }/android/AndroidManifest_bare.xml"
         @template.render.should == bare_manifest
       end
