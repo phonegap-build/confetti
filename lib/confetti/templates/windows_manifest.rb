@@ -7,8 +7,11 @@ module Confetti
         @config.name.name.strip
       end
 
-      def safe_title
-        title.tr(' ', '')
+      def package_identifier
+        val = title.gsub(/[^\.a-z0-9]/i, '')
+        val = "app" if val == ""
+        val = "app.#{val}" if val[0] !~ /[a-z]/i
+        val
       end
 
       def author
@@ -20,7 +23,7 @@ module Confetti
         if !pref.nil?
           pref
         else
-          "#{ author }.#{ title }".gsub(/[^-.A-Za-z0-9]/, '')
+          "#{ author }.#{ title }".gsub(/[^-\.a-z0-9]/i, '')
         end
       end
 

@@ -105,6 +105,23 @@ describe Confetti::Template::WindowsManifest do
     end
   end
 
+  describe "package_identifier" do
+    before do
+      @config = Confetti::Config.new "spec/fixtures/config.xml"
+    end
+
+    it "should return the default from the title" do
+      @template = @template_class.new(@config)
+      @template.package_identifier.should == "ConfettiSampleApp"
+    end
+
+    it "should strip illegal characters from the default" do
+      @config.instance_variable_set(:@name, Confetti::Config::Name.new('12is.a.windows-%^$#{ %}_dev !'))
+      @template = @template_class.new(@config)
+      @template.package_identifier.should == 'app.12is.a.windowsdev'
+    end
+  end
+
   describe "identity_name" do
     before do
       @config = Confetti::Config.new "spec/fixtures/config.xml"
