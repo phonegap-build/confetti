@@ -20,7 +20,7 @@ module Confetti
         if !pref.nil?
           pref
         else
-          "#{ author.tr(' ', '') }.#{ title.tr(' ', '') }"
+          "#{ author }.#{ title }".gsub(/[^-.A-Za-z0-9]/, '')
         end
       end
 

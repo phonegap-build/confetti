@@ -105,6 +105,29 @@ describe Confetti::Template::WindowsManifest do
     end
   end
 
+  describe "identity_name" do
+    before do
+      @config = Confetti::Config.new "spec/fixtures/config.xml"
+    end
+
+    it "should return the identity_name from the preference" do
+      @config.preference_set << Confetti::Config::Preference.new("windows-identity-name", "lunny-dev")
+      @template = @template_class.new(@config)
+      @template.identity_name.should == :"lunny-dev"
+    end
+
+    it "should return the default from the author and title if no preference" do
+      @template = @template_class.new(@config)
+      @template.identity_name.should == "AndrewLunny.ConfettiSampleApp"
+    end
+
+    it "should strip illegal characters from the default" do
+      @config.instance_variable_set(:@name, Confetti::Config::Name.new('is.a.windows-%^$#{ %}_dev !'))
+      @template = @template_class.new(@config)
+      @template.identity_name.should == 'AndrewLunny.is.a.windows-dev'
+    end
+  end
+
   describe "author" do
     before do
       @config = Confetti::Config.new "spec/fixtures/config.xml"
