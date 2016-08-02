@@ -8,10 +8,9 @@ module Confetti
       end
 
       def package_identifier
-        val = title.gsub(/[^\.a-z0-9]/i, '')
+        val = title.gsub(/[^\.a-z]/i, '')
         val = "app" if val == ""
-        val = "app.#{val}" if val[0] !~ /[a-z]/i
-        val
+        val[0..49]
       end
 
       def author
@@ -23,7 +22,7 @@ module Confetti
         if !pref.nil?
           pref
         else
-          "#{ author }.#{ title }".gsub(/[^-\.a-z0-9]/i, '')
+          "#{ author }.#{ title }".gsub(/[^-\.a-z]/i, '')[0..49]
         end
       end
 
