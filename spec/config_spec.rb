@@ -496,7 +496,7 @@ describe Confetti::Config do
       end
 
       it "should populate the plugin set" do
-        @plugins.size.should be 3
+        @plugins.size.should be 4
       end
 
       describe "plugin set created" do
@@ -504,6 +504,7 @@ describe Confetti::Config do
           @child = @plugins.detect { |a| a.name == "ChildBrowser" }
           @push = @plugins.detect { |a| a.name == "PushNotifications" }
           @fbconnect = @plugins.detect { |a| a.name == "FBConnect" }
+          @gmaps = @plugins.detect { |a| a.name == "GMaps" }
         end
 
         it "should set the version properties correctly" do
@@ -536,6 +537,15 @@ describe Confetti::Config do
 
           it "should be populated correctly" do
             params = @fbconnect.param_set
+            key = params.detect { |pm| pm.name == "APIKey" }
+            secret = params.detect { |pm| pm.name == "APISecret" }
+
+            key.value.should == "SOMEKEY"
+            secret.value.should == "SOMESECRET"
+          end
+
+          it "should be populated correctly" do
+            params = @gmaps.param_set
             key = params.detect { |pm| pm.name == "APIKey" }
             secret = params.detect { |pm| pm.name == "APISecret" }
 

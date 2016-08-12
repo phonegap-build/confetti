@@ -60,4 +60,9 @@ THE SOFTWARE.</license>
     <param name="APIKey" value="SOMEKEY" />
     <param name="APISecret" value="SOMESECRET" />
   </gap:plugin>
+
+  <gap:plugin name="GMaps" version="~1">
+    <variable name="APIKey" value="SOMEKEY" />
+    <variable name="APISecret" value="SOMESECRET" />
+  </gap:plugin>
 </widget>
