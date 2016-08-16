@@ -27,7 +27,7 @@ module Confetti
           val1 = author.gsub(/[^-a-z]/i, '')[0..20]
           val2 = title.gsub(/[^-a-z]/i, '')[0..20]
           val1 = "Cordova" if val1 == ""
-          val2 = "App" if val1 == ""
+          val2 = "App" if val2 == ""
           "#{ val1 }.#{ val2 }"
         end
       end
