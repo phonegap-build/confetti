@@ -147,7 +147,7 @@ describe Confetti::Template::WindowsManifest do
     it "should strip illegal characters from the default" do
       @config.instance_variable_set(:@name, Confetti::Config::Name.new('is.a.windows-%^$#{ %}_dev !'))
       @template = @template_class.new(@config)
-      @template.identity_name.should == 'AndrewLunny.is.a.windows-dev'
+      @template.identity_name.should == 'AndrewLunny.isawindows-dev'
     end
   end
 

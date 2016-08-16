@@ -24,7 +24,11 @@ module Confetti
         if !pref.nil?
           pref
         else
-          "#{ author }.#{ title }".gsub(/[^-\.a-z]/i, '')[0..49]
+          val1 = author.gsub(/[^-a-z]/i, '')[0..20]
+          val2 = title.gsub(/[^-a-z]/i, '')[0..20]
+          val1 = "Cordova" if val1 == ""
+          val2 = "App" if val1 == ""
+          "#{ val1 }.#{ val2 }"
         end
       end
 
