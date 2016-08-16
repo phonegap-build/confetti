@@ -8,6 +8,8 @@ module Confetti
       end
 
       def package_identifier
+        return @config.windows_package_name if @config.windows_package_name
+        
         val = title.gsub(/[^\.a-z]/i, '')
         val = "app" if val == ""
         val[0..49]

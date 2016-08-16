@@ -7,7 +7,7 @@ module Confetti
     attr_accessor :package, :version_string, :version_code, :description,
                   :height, :width, :plist_icon_set, :url_scheme_set, :default_min_sdk,
                   :android_versioncode, :ios_cfbundleversion, :windows_package_version,
-                  :windows_publisher_id, :windows_identity_name
+                  :windows_publisher_id, :windows_identity_name, :windows_package_name
 
     attr_reader :author, :viewmodes, :name, :license, :content,
                 :icon_set, :feature_set, :preference_set, :xml_doc,
@@ -107,6 +107,7 @@ module Confetti
       @android_versioncode      = config_doc["android-versionCode"] 
       @ios_cfbundleversion      = config_doc["ios-CFBundleVersion"] 
       @windows_package_version  = config_doc["windows-packageVersion"]
+      @windows_package_name     = config_doc["packageName"]
 
       icon_index = 0
       splash_index = 0

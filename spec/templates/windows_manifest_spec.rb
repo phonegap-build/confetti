@@ -110,6 +110,12 @@ describe Confetti::Template::WindowsManifest do
       @config = Confetti::Config.new "spec/fixtures/config.xml"
     end
 
+    it "should return packageName from config.xml if present" do
+      @config.instance_variable_set(:@windows_package_name, 'ConfigPackageName')
+      @template = @template_class.new(@config)
+      @template.package_identifier.should == "ConfigPackageName"
+    end
+
     it "should return the default from the title" do
       @template = @template_class.new(@config)
       @template.package_identifier.should == "ConfettiSampleApp"
