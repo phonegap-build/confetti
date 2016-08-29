@@ -16,7 +16,7 @@ module Confetti
       end
 
       def author
-        @config.author.name ? @config.author.name[0..49] : ""
+        @config.author.name ? @config.author.name[0..49] : "Default Publisher Name"
       end
 
       def identity_name

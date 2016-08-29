@@ -161,6 +161,18 @@ describe Confetti::Template::WindowsManifest do
       @template.author.should == "Andrew Lunny"
     end
 
+    it "should return default if author not present" do
+      @config.instance_variable_set(:@author, Confetti::Config::Author.new)
+      @template.author.should == "Default Publisher Name"
+    end
+
+    it "should truncate the field to 50 chars or less" do
+      me = "Andrew John Lunny, son of William and Vivian, brother of Hugo"
+      short = "Andrew John Lunny, son of William and Vivian, brot"
+      @config.author.name = me
+      @template.author.should == short
+    end
+
     it "should truncate the field to 50 chars or less" do
       me = "Andrew John Lunny, son of William and Vivian, brother of Hugo"
       short = "Andrew John Lunny, son of William and Vivian, brot"
