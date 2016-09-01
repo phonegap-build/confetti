@@ -172,12 +172,5 @@ describe Confetti::Template::WindowsManifest do
       @config.author.name = me
       @template.author.should == short
     end
-
-    it "should truncate the field to 50 chars or less" do
-      me = "Andrew John Lunny, son of William and Vivian, brother of Hugo"
-      short = "Andrew John Lunny, son of William and Vivian, brot"
-      @config.author.name = me
-      @template.author.should == short
-    end
   end
 end
