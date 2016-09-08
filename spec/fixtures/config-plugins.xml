@@ -57,12 +57,17 @@ THE SOFTWARE.</license>
   <gap:plugin name="PushNotifications" version="~2.0" platform="android" />
 
   <gap:plugin name="FBConnect" version="~1" source="external" >
-    <param name="APIKey" value="SOMEKEY" />
-    <param name="APISecret" value="SOMESECRET" />
+    <param name="APIKey" value="SOMEKEY1" />
+    <variable name="APISecret" value="SOMESECRET1" />
   </gap:plugin>
 
   <gap:plugin name="GMaps" version="~1">
-    <variable name="APIKey" value="SOMEKEY" />
-    <variable name="APISecret" value="SOMESECRET" />
+    <param name="APIKey" value="SOMEKEY2" />
+    <variable name="APISecret" value="SOMESECRET2" />
   </gap:plugin>
+
+  <plugin name="GAnalytics" version="~1">
+    <param name="APIKey" value="SOMEKEY3" />
+    <variable name="APISecret" value="SOMESECRET3" />
+  </plugin>
 </widget>

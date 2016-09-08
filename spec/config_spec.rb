@@ -496,7 +496,7 @@ describe Confetti::Config do
       end
 
       it "should populate the plugin set" do
-        @plugins.size.should be 4
+        @plugins.size.should be 5
       end
 
       describe "plugin set created" do
@@ -505,6 +505,7 @@ describe Confetti::Config do
           @push = @plugins.detect { |a| a.name == "PushNotifications" }
           @fbconnect = @plugins.detect { |a| a.name == "FBConnect" }
           @gmaps = @plugins.detect { |a| a.name == "GMaps" }
+          @ganalytics = @plugins.detect { |a| a.name == "GAnalytics" }
         end
 
         it "should set the version properties correctly" do
@@ -540,8 +541,8 @@ describe Confetti::Config do
             key = params.detect { |pm| pm.name == "APIKey" }
             secret = params.detect { |pm| pm.name == "APISecret" }
 
-            key.value.should == "SOMEKEY"
-            secret.value.should == "SOMESECRET"
+            key.value.should == "SOMEKEY1"
+            secret.value.should == "SOMESECRET1"
           end
 
           it "should be populated correctly" do
@@ -549,8 +550,17 @@ describe Confetti::Config do
             key = params.detect { |pm| pm.name == "APIKey" }
             secret = params.detect { |pm| pm.name == "APISecret" }
 
-            key.value.should == "SOMEKEY"
-            secret.value.should == "SOMESECRET"
+            key.value.should == "SOMEKEY2"
+            secret.value.should == "SOMESECRET2"
+          end
+
+          it "should be populated correctly" do
+            params = @ganalytics.param_set
+            key = params.detect { |pm| pm.name == "APIKey" }
+            secret = params.detect { |pm| pm.name == "APISecret" }
+
+            key.value.should == "SOMEKEY3"
+            secret.value.should == "SOMESECRET3"
           end
         end
       end

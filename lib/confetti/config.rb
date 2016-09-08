@@ -191,6 +191,9 @@ module Confetti
         ele.search("param").each do |param|
           plugin.param_set << Param.new(param["name"], param["value"])
         end
+        ele.search("variable").each do |param|
+          plugin.param_set << Param.new(param["name"], param["value"])
+        end
         @plugin_set << plugin
       }
 
