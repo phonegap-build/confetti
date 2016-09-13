@@ -26,7 +26,10 @@ module Confetti
       end
 
       def version_code
-        config_version_code = @config.android_versioncode || @config.version_code
+        config_version_code = @config.preference("android-versionCode", :android) || 
+          @config.android_versioncode || 
+          @config.version_code
+          
         if config_version_code.nil?
           '1'
         else

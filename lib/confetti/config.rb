@@ -33,7 +33,7 @@ module Confetti
       @author           = Author.new
       @name             = Name.new
       @license          = License.new
-      @content          = Content.new
+      @content          = Content.new('index.html', nil, nil)
       @icon_set         = TypedSet.new Image
       @plist_icon_set   = [] 
       @feature_set      = TypedSet.new Feature
@@ -154,7 +154,7 @@ module Confetti
           @allow_intent_set << AllowIntent.new(attr["href"])
 
         when "content"
-          @content = Content.new(attr["src"], attr["type"], attr["encoding"])
+          @content = Content.new(attr["src"] || "index.html", attr["type"], attr["encoding"])
 
         when "platform"
           platform = attr["name"]
