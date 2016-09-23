@@ -107,10 +107,12 @@ describe Confetti::Template::AndroidManifest do
     before do
       @config = Confetti::Config.new
       @config.populate_from_xml("#{fixture_dir}/config_with_version_code.xml")
+      @template = @template_class.new(@config)
     end
 
     it "should have set @config.version_code correctly" do
       @config.version_code.should == "5"
+      @template.version_code.should == "4"
     end
   end
 
@@ -324,11 +326,6 @@ describe Confetti::Template::AndroidManifest do
     it "should reflect an integer version code if present" do
       @config.version_code = "12"
       @template.version_code.should == "12"
-    end
-
-    it "should turn floats into integers" do
-      @config.version_code = "2.0.0"
-      @template.version_code.should == "2"
     end
 
     it "should allow override with android_versioncode" do

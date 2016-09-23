@@ -30,12 +30,7 @@ module Confetti
           @config.android_versioncode || 
           @config.version_code
           
-        if config_version_code.nil?
-          '1'
-        else
-          int = config_version_code.to_i
-          int == 0 ? '1' : int.to_s
-        end
+        config_version_code.nil? ? '1' : config_version_code.to_s
       end
 
       def app_orientation
