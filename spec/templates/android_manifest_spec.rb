@@ -207,6 +207,39 @@ describe Confetti::Template::AndroidManifest do
     end
   end
 
+  describe "#version_code" do
+    before do
+      @config = Confetti::Config.new
+      @template = @template_class.new(@config)
+    end
+
+    it "should default to 1" do
+      @template.version_code.should == "1"
+    end
+
+    describe "when set" do
+      before do
+        @v_pref = Confetti::Config::Preference.new "android-versionCode"
+        @config.preference_set << @v_pref
+      end
+
+      it "should return that number" do
+        @v_pref.value = "12"
+        @template.version_code.should == '12'
+      end
+
+      it "should be 1 if not an integer" do
+        @v_pref.value = "12.0"
+        @template.version_code.should == "1"
+      end
+
+      it "should be 1 if not a number" do
+        @v_pref.value = "twelve"
+        @template.version_code.should == "1"
+      end
+    end
+  end
+
   describe "#max_sdk_version_attribute" do
     before do
       @config = Confetti::Config.new

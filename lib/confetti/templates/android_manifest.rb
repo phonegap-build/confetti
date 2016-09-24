@@ -28,9 +28,10 @@ module Confetti
       def version_code
         config_version_code = @config.preference("android-versionCode", :android) || 
           @config.android_versioncode || 
-          @config.version_code
+          @config.version_code ||
+          "1"
           
-        config_version_code.nil? ? '1' : config_version_code.to_s
+        (config_version_code =~ /\A\d+\Z/) ? config_version_code.to_s : "1"
       end
 
       def app_orientation
