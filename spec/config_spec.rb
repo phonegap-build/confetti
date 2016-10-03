@@ -669,8 +669,10 @@ describe Confetti::Config do
   describe "preference accessor" do
     before do
       @config = Confetti::Config.new
-      @pref = Confetti::Config::Preference.new "permissions", "none"
-      @config.preference_set << @pref
+      @pref1 = Confetti::Config::Preference.new "permissions", "none"
+      @pref2 = Confetti::Config::Preference.new "deviceTYPE", "phone"
+      @config.preference_set << @pref1
+      @config.preference_set << @pref2
     end
 
     it "should return the value of the specified preference" do
@@ -679,6 +681,10 @@ describe Confetti::Config do
 
     it "should be nil when the preference is not set" do
       @config.preference(:size, :ios).should be_nil
+    end
+
+    it "should match case-insensitively" do
+      @config.preference(:devicetype, :ios).should == :phone
     end
 
     it "should be nil when the preference has no value" do

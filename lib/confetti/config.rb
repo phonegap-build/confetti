@@ -279,13 +279,13 @@ module Confetti
     # returns nil if the preference doesn't exist
     def preference_object name, platform, use_default=true
       pref = @preference_set.select { |pref| 
-        pref.name == name.to_s && pref.platform == platform.to_s 
+        pref.name.downcase == name.to_s.downcase && pref.platform == platform.to_s 
       }.last
       
       return pref if !use_default
 
       pref ||= @preference_set.select { |pref| 
-        pref.name == name.to_s && pref.platform == nil 
+        pref.name.downcase == name.to_s.downcase && pref.platform == nil 
       }.last
     end
 
