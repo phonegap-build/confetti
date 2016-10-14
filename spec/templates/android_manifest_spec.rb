@@ -356,6 +356,16 @@ describe Confetti::Template::AndroidManifest do
       @template.version_code.should == "1"
     end
 
+    it "should generate version_code from version_string for default if present" do
+      @config.version_string = "2.4.5"
+      @template.version_code.should == "20405"
+    end
+
+    it "should use default 1 if invalid version" do
+      @config.version_string = "fred"
+      @template.version_code.should == "1"
+    end
+
     it "should reflect an integer version code if present" do
       @config.version_code = "12"
       @template.version_code.should == "12"

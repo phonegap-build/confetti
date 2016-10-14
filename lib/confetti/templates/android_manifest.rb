@@ -26,12 +26,20 @@ module Confetti
       end
 
       def version_code
+        default = 1
+        
+        begin
+          vers = Versionomy.parse(self.version)
+          default = (vers.major * 10000) + (vers.minor * 100) + vers.tiny
+          default = 1 if default == 0
+        rescue Versionomy::Errors::ParseError ; end
+
         config_version_code = @config.preference("android-versionCode", :android) || 
           @config.android_versioncode || 
-          @config.version_code ||
-          "1"
+          @config.version_code || 
+          default
           
-        (config_version_code =~ /\A\d+\Z/) ? config_version_code.to_s : "1"
+        (config_version_code =~ /\A\d+\Z/) ? config_version_code.to_s : default.to_s
       end
 
       def app_orientation

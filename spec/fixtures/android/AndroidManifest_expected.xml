@@ -4,7 +4,7 @@
     package="com.alunny.confetti"
     android:installLocation="internalOnly"
     android:versionName="1.0.0"
-    android:versionCode="1"
+    android:versionCode="10000"
     android:windowSoftInputMode="adjustPan">
 
     <supports-screens

@@ -13,6 +13,7 @@ rescue LoadError
 end
 
 require "mustache"
+require 'versionomy'
 
 # internal dependencies
 require 'typedset'
