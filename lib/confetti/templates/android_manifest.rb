@@ -25,6 +25,10 @@ module Confetti
         @config.version_string || '0.0.1'
       end
 
+      def icon_name
+        @config.android_icon_name || '@mipmap/icon'
+      end
+
       def version_code
         default = 1
         
