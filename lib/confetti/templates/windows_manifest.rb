@@ -58,7 +58,7 @@ module Confetti
       end
 
       def version
-        v = normalize_version(@config.version_string).split('.')
+        v = normalize_version(@config.windows_package_version || @config.version_string).split('.')
 
         # after the first one, each segment can only have one character
         "#{ v[0] }.#{ v[1][0..0] }.#{ v[2][0..0] }.0"
