@@ -93,20 +93,14 @@ describe Confetti::Template::WindowsManifest do
       @template.version.should == "12.0.0.0"
     end
 
-    it "should ensure the non-initial numbers are one digit" do
-      # THIS IS STUPID
-      @config.version_string = "2012.05.20"
-      @template.version.should == "2012.0.2.0"
-    end
-
     it "should ensure letters are converted to numbers" do
       @config.version_string = "1.3.a"
       @template.version.should == "1.3.0.0"
     end
 
     it "should use windows_package_version if present" do
-      @config.windows_package_version = "4.5.6"
-      @template.version.should == "4.5.6.0"
+      @config.windows_package_version = "a-version-string"
+      @template.version.should == "a-version-string"
     end
   end
 

@@ -45,7 +45,7 @@ module Confetti
         else
           package = @config.package
           package ||= 'com.example.app'
-          package = "#{package}" + "second";
+          package = "#{package}" + "second"
           generate_guid package
         end
       end
@@ -58,10 +58,10 @@ module Confetti
       end
 
       def version
-        v = normalize_version(@config.windows_package_version || @config.version_string).split('.')
+        return @config.windows_package_version if @config.windows_package_version
 
-        # after the first one, each segment can only have one character
-        "#{ v[0] }.#{ v[1][0..0] }.#{ v[2][0..0] }.0"
+        v = normalize_version(@config.version_string).split('.')
+        "#{ v[0] || 1 }.#{ v[1] || 0 }.#{ v[2] || 0 }.0"
       end
 
       def output_filename 
