@@ -103,6 +103,11 @@ describe Confetti::Template::WindowsManifest do
       @config.version_string = "1.3.a"
       @template.version.should == "1.3.0.0"
     end
+
+    it "should use windows_package_version if present" do
+      @config.windows_package_version = "4.5.6"
+      @template.version.should == "4.5.6.0"
+    end
   end
 
   describe "package_identifier" do
