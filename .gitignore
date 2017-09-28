@@ -4,3 +4,4 @@ pkg/*
 .bundle
 tmp/*
 .ruby-version
+vendor
