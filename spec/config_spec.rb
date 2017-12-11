@@ -748,6 +748,13 @@ describe Confetti::Config do
       @config = Confetti::Config.new file 
     end
 
+    it "should return proper values for " do
+      @config.splash?('ios').should == true
+      @config.splash?(:ios).should == true
+      @config.icon?('android').should == true
+      @config.icon?('webos').should == true
+    end
+
     it "should return all blackberry icons with hover" do
       match = @config.filter_images(
           @config.icon_set,
