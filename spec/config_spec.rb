@@ -939,21 +939,21 @@ describe Confetti::Config do
     end
 
     it "should return the default icon: icon.png" do
-      @config.default_icon.src.should == "icon.png"
+      @config.default_icon('android').src.should == "icon.png"
     end
 
     it "should fail to return the default icon: icon.png" do
       @config = Confetti::Config.new
-      @config.default_icon.should == nil 
+      @config.default_icon('android').should == nil 
     end
 
     it "should return the default splash: splash.png" do
-      @config.default_splash.src.should == "splash.png"
+      @config.default_splash('android').src.should == "splash.png"
     end
 
     it "should fail to return the default splash: splash.png" do
       @config = Confetti::Config.new
-      @config.default_splash.should == nil 
+      @config.default_splash('android').should == nil 
     end
   end
 

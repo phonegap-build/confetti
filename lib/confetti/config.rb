@@ -346,10 +346,11 @@ module Confetti
         {'platform'  => nil, 'role' => opts['role']}
       ]
 
-      if required # match platform default, global default, first file without a platform
+      if required # match platform default, global default, first file without a platform, first file from platform
         filters << no_attributes.merge({'platform' => opts['platform']})
         filters << no_attributes
         filters << {'platform'  => nil}
+        filters << {'platform' => opts['platform']}
       end
 
       matches = nil
@@ -368,18 +369,12 @@ module Confetti
       nil
     end
 
-    def default_icon
-      @icon_set.each do |icon|
-        return icon if icon.src && icon.src =~ /^icon(\.[a-zA-Z0-9]+)+$/i
-      end
-      nil
+    def default_icon platform
+      find_best_fit_img @icon_set, { 'platform' => platform }, true
     end
 
-    def default_splash
-      @splash_set.each do |splash|
-        return splash if splash.src && splash.src =~ /^splash(\.[a-zA-Z0-9]+)$/i
-      end
-      nil
+    def default_splash platform
+      find_best_fit_img @splash_set, { 'platform' => platform }, true
     end
 
     def filter_images images, filter
