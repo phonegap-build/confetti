@@ -308,14 +308,6 @@ module Confetti
       @access_set.detect { |a| a.origin == '*' }
     end
 
-    def splash? platform
-      @splash_set.any? { |img| img.platform == platform.to_s || img.platform.nil? }
-    end
-
-    def icon? platform
-      @icon_set.any? { |img| img.platform == platform.to_s || img.platform.nil? }
-    end
-
     def find_best_fit_img images, opts, required=true
 
       opts['width']     ||= :no_match
@@ -367,6 +359,14 @@ module Confetti
         return matches.sort {|a,b| a.index.to_i <=> b.index.to_i }.first
       end
       nil
+    end
+
+    def splash? platform
+      !!default_splash(platform)
+    end
+
+    def icon? platform
+      !!default_icon(platform)
     end
 
     def default_icon platform
