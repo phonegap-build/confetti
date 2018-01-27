@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns		= "http://www.w3.org/ns/widgets"
+  xmlns:gap="http://search.yahoo.com/mrss/"
+	id		= "com.okapi.spec.config"
+	version 	= "1.2.3">
+
+<title>test</title>
+
+<platform name="ios">
+  <preference name="a" value="b" />
+  <icon1 src="resize/cat.svg" resize="true" pad_colour1="#00f" gravity="w" />
+  <splash1 src="resize/cat.svg" resize="true" orientation='both' gravity="w" pad_colour="#00f" />
+</platform>
+
+<platform name="android" />
+
+<!-- poot -->
+
+<icon1 src="resize/ski.jpg" platform1="ios" resize="true" gravity="w" pad_colour="#0f0" />
+
+<splash1 src="resize/jap.jpg" platform="android" resize="true" orientation='both' gravity1="nw" shrink="true" pad_colour1="#0f0" />
+
+<splash src="resize/statue2.jpg" platform="ios" resize="true" orientation1='both' gravity1="nw" shrink="true" pad_colour="#0f0" />
+
+
+<!-- <icon src="resize/splash.png" resize="true" />-->
+
+<!--
+<splash src="resize/splash.png" resize="true" orientation="both" gravity="center" />
+<splash src="resize/splash.png" resize="true" orientation="portrait" gravity="center" platform='ios' />     
+<splash src="resize/splash.png" resize="true" orientation="landscape" gravity="center" platform='ios' />
+<splash src="resize/splash.png" resize="true" orientation="landscape" gravity="center" platform='ios' />
+-->
+
+</widget>

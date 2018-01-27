@@ -3,6 +3,10 @@ CURRENT_DIR = File.dirname(__FILE__)
 # stdlib
 require 'nokogiri'
 require 'digest/md5'
+require 'mini_magick'
+require 'image_optimizer'
+require 'open3'
+ImageOptimizer.quiet = true
 
 # external dependencies
 begin
@@ -42,3 +46,6 @@ require 'confetti/config'
 require 'confetti/config/feature'
 require 'confetti/config/image'
 require 'confetti/config/url_scheme'
+
+require 'confetti/resizer'
+require 'util/safe_sys'

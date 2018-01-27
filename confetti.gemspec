@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency "mustache", "~> 0.11.2"
   s.add_dependency "nokogiri", "~> 1.8.2"
   s.add_dependency "versionomy", "~> 0.5.0"
+  s.add_dependency "mini_magick", "~> 4.8.0"
+  s.add_dependency "image_optimizer", "~> 1.7.2"
 
   s.add_development_dependency "rspec", "~> 2.6.0"
 end

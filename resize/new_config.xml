@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://search.yahoo.com/mrss/" id="com.okapi.spec.config" version="1.2.3">
+  <title>test</title>
+  <platform name="ios">
+    <preference name="a" value="b"/>
+    <icon1 src="resize/cat.svg" resize="true" pad_colour1="#00f" gravity="w"/>
+    <splash1 src="resize/cat.svg" resize="true" orientation="both" gravity="w" pad_colour="#00f"/>
+  </platform>
+  <platform name="android"/>
+  <!-- poot -->
+  <icon1 src="resize/ski.jpg" platform1="ios" resize="true" gravity="w" pad_colour="#0f0"/>
+  <splash1 src="resize/jap.jpg" platform="android" resize="true" orientation="both" gravity1="nw" shrink="true" pad_colour1="#0f0"/>
+  <platform name="ios">
+    <splash width="2048" height="2732" src="resize/_images/splash-ios-2048x2732.png"/>
+    <splash width="1668" height="2224" src="resize/_images/splash-ios-1668x2224.png"/>
+    <splash width="1536" height="2048" src="resize/_images/splash-ios-1536x2048.png"/>
+    <splash width="1125" height="2436" src="resize/_images/splash-ios-1125x2436.png"/>
+    <splash width="1242" height="2208" src="resize/_images/splash-ios-1242x2208.png"/>
+    <splash width="750" height="1334" src="resize/_images/splash-ios-750x1334.png"/>
+    <splash width="640" height="1136" src="resize/_images/splash-ios-640x1136.png"/>
+  </platform>
+  <!-- <icon src="resize/splash.png" resize="true" />-->
+  <!--
+<splash src="resize/splash.png" resize="true" orientation="both" gravity="center" />
+<splash src="resize/splash.png" resize="true" orientation="portrait" gravity="center" platform='ios' />     
+<splash src="resize/splash.png" resize="true" orientation="landscape" gravity="center" platform='ios' />
+<splash src="resize/splash.png" resize="true" orientation="landscape" gravity="center" platform='ios' />
+-->
+</widget>

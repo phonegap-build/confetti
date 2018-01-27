@@ -5,3 +5,6 @@ pkg/*
 tmp/*
 .ruby-version
 vendor
+resize/_images
+*.jpg.png
+new_config.xml

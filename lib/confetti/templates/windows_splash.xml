@@ -1,0 +1,14 @@
+<platform name="windows">
+  <icon src="icon-small.png" platform="ios" width="29" height="29" />
+  <icon src="icon-40.png" platform="ios" width="40" height="40" />
+  <icon src="icon-small@2x.png" platform="ios" width="58" height="58" />
+  <icon src="icon-60.png" platform="ios" width="60" height="60" />
+  <icon src="icon-76.png" platform="ios" width="76" height="76" />
+  <icon src="icon-40@2x.png" platform="ios" width="80" height="80" />
+  <icon src="icon-small@3x.png" platform="ios" width="87" height="87" />
+  <icon src="icon-40@3x.png" platform="ios" width="120" height="120" />
+  <icon src="icon-76@2x.png" platform="ios" width="152" height="152" />
+  <icon src="icon-83.5@2x.png" platform="ios" width="167" height="167" />
+  <icon src="icon-60@3x.png" platform="ios" width="180" height="180" />
+</platform>
+
