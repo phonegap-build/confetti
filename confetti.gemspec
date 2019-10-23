@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "mustache", "~> 0.11.2"
-  s.add_dependency "nokogiri", "~> 1.8.2"
+  s.add_dependency "nokogiri", "~> 1.10.4"
   s.add_dependency "versionomy", "~> 0.5.0"
 
   s.add_development_dependency "rspec", "~> 2.6.0"
